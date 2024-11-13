@@ -13,6 +13,8 @@ export interface IPlayerData {
   placeId?: string;
   totalSpecialPower?: number;
   currentSpecialPower?: number;
+  characterName: number;
+  roomType?: number;
 }
 export interface IWinnerData {
     playerId?: string;
@@ -28,9 +30,10 @@ export interface IPositionData {
 export interface IAnimationData {
   playerId?: string;
   sessionId?: string;
-  anim?: string;
-  loop?: boolean;
-  animType?: PlayerAnimType;
+  anim: string;
+  loop: boolean;
+  isCollision?: boolean;
+  animType: PlayerAnimType;
 }
 export interface IResultData {
   winner: IPlayerResult;

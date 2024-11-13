@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client"; // Ensure you have socket.io-client installed
 import { ServerEventsManager } from "./ServerEventsManager";
-import { GameEvents } from "../Constant/GameConstant";
+import { GameEvents, PlayerName, RoomType } from "../Constant/GameConstant";
 import { GameModel } from "../Constant/GameModel";
 import { IPlayerData } from "../Constant/GameInterface";
 
@@ -13,6 +13,8 @@ export interface IPlayerJoinData {
   playerName?: string;
   wagerAmount?: number;
   photoId?: number;
+  characterName?: PlayerName;
+  roomType?: RoomType;
 }
 export class SocketManager {
   private static instance: SocketManager | null = null; // Allow null assignment here
@@ -35,7 +37,7 @@ export class SocketManager {
   init(roomType: string = "Random"): Promise<Socket> {
     return new Promise<Socket>((resolve, reject) => {
       try {
-        // const url = "http://localhost:3000"; // Local server URL
+        //const url = "http://localhost:3000"; // Local server URL
         const url = "https://fightinggame-server.onrender.com"; // Local server URL
 
         // Initialize the socket connection with public reconnection settings
@@ -87,6 +89,8 @@ export class SocketManager {
       playerName: "Faheem",
       wagerAmount: 5000,
       photoId: 1,
+      characterName: GameModel._characterName,
+      roomType: GameModel._roomType,
     };
     console.log("on join player : ", PlayerData);
     this.initializeData(PlayerData)
@@ -107,6 +111,7 @@ export class SocketManager {
       placeId: "1",
       totalSpecialPower: 0,
       currentSpecialPower: 0,
+      characterName:PlayerName.SirMifriend
     };
     GameModel._playerData = data;
   }

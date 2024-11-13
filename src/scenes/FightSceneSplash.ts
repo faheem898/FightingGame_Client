@@ -1,4 +1,8 @@
-import { fightSceneTexture } from "../Constant/GameConstant";
+import {
+  BgJsonData,
+  CharacterJsonData,
+  fightSceneTexture,
+} from "../Constant/AssetManager";
 import { ServerEventsManager } from "../PlayerManager/ServerEventsManager";
 import { SocketManager } from "../PlayerManager/SocketManager";
 
@@ -40,7 +44,7 @@ export default class FightSceneSplash extends Phaser.Scene {
       console.log("Image Key : ", imageKey, imageAddress);
       this.load.image(imageKey, imageAddress);
     });
-    this.fightSceneSpine.forEach((element) => {
+    BgJsonData.forEach((element) => {
       this.load.spineJson(
         element.spineKey,
         `assets/SpineAnimation/${element.json}`
@@ -50,10 +54,21 @@ export default class FightSceneSplash extends Phaser.Scene {
         `assets/SpineAnimation/${element.atlas}`
       );
     });
+    CharacterJsonData.forEach((element) => {
+      this.load.spineJson(
+        element.spineKey,
+        `assets/SpineAnimation/${element.json}`
+      );
+      this.load.spineAtlas(
+        `${element.spineKey}-atlas`,
+        `assets/SpineAnimation/${element.atlas}`
+      );
+     // console.log("Json Key : ", element.spineKey, element.json, element.atlas);
+    });
     fightSceneTexture.forEach((element) => {
       const imageKey = element.split(".")[0];
       const imageAddress = `assets/GameUI/${element}`;
-      console.log("Image Key : ", imageKey, imageAddress);
+      //console.log("Image Key : ", imageKey, imageAddress);
       this.load.image(imageKey, imageAddress);
     });
     //this.setProgressBar();
@@ -111,11 +126,8 @@ export default class FightSceneSplash extends Phaser.Scene {
       // Add an event listener for when the sprite is clicked (pointerdown or pointerup)
       playNow.on("pointerdown", () => {
         // When clicked, start the fight scene
-        //console.log("play Now Clicked");
-        // this.startMatchMaking();
         this.scene.start("MatchMakingScene");
       });
     } catch (error) {}
   }
- 
 }

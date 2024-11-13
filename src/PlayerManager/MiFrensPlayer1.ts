@@ -2,7 +2,14 @@
 
 import { Vector3 } from "@esotericsoftware/spine-phaser";
 import { ClientEvents } from "../Constant/Events";
-import { PlayerAnimType, PlayerPosition } from "../Constant/GameConstant";
+import {
+  PlayerAnim,
+  PlayerAnims,
+  PlayerAnimType,
+  PlayerName,
+  PlayerNameKey,
+  PlayerPosition,
+} from "../Constant/GameConstant";
 import {
   IAnimationData,
   IPlayerData,
@@ -41,8 +48,12 @@ class MiFrensPlayer {
   _sessionId: string | undefined;
   isLeftPlayer: boolean = false;
   isSpecialPower: boolean = false;
+  isAnimating: boolean = false;
   _playerData!: IPlayerData;
   _specialPowerInterval!: any;
+  _characterName!: PlayerName;
+  _characterAnimations: any;
+  _collisionWidth: number = 40;
 
   //   _selectedIcon: string = "Icon";
   constructor(gameManager: FightScene, playerData: IPlayerData) {
@@ -52,6 +63,8 @@ class MiFrensPlayer {
     this._playerData = playerData;
     this._playeId = playerData.playerId;
     this._sessionId = playerData.playerId;
+    GameModel._characterName = playerData?.characterName;
+    this._characterName = GameModel._characterName;
     this.setPlayerData(playerData);
   }
 
@@ -60,9 +73,11 @@ class MiFrensPlayer {
     this._sessionId = playerData?.sessionId;
     if (playerData.placeId === "0") {
       this._playerPosition = PlayerPosition.LeftPlayer;
+      this._characterName = PlayerName.SirMifriend;
       this.isLeftPlayer = true;
     } else {
       this._playerPosition = PlayerPosition.RightPlayer;
+      this._characterName = PlayerName.Pepe;
     }
   }
   async initializePlayer(_playerPosition: PlayerPosition) {
@@ -81,10 +96,14 @@ class MiFrensPlayer {
       }
     });
   }
+
   async createPlayer() {
     return new Promise<void>((resolve, reject) => {
       try {
-        console.log("Player Createdd", this._playerPosition);
+        //console.log("Player Createdd", this._playerPosition);
+        this._collisionWidth = GameModel._collisonWidth[this._characterName];
+        this._characterAnimations = PlayerAnims[this._characterName];
+        //console.log("Character Animations : ",this._characterAnimations);
         let _posDiff = -1;
         if (this._playerPosition === PlayerPosition.RightPlayer) {
           _posDiff = 1;
@@ -92,16 +111,17 @@ class MiFrensPlayer {
         this.player = this.gameManager.add.spine(
           this.screenWidth / 2 + 200 * _posDiff,
           this.screenHeight - 25,
-          "Sirmifren",
-          "Sirmifren-atlas"
+          PlayerNameKey[this._characterName],
+          `${PlayerNameKey[this._characterName]}-atlas`
         );
-        this.player.animationState.setAnimation(0, "idle", true);
-        //this.dogePlayer.animationState.setAnimation(0, "idle", true);
+        //this.player.animationState.setAnimation(0, this._characterAnimations[PlayerAnim.Idle_Tension], true);
         this.player.setOrigin(0.5, 0.5);
-        const scaleFactor = this.screenHeight / 2 / (this.player.height * 0.75);
+        const scaleFactor = this.screenHeight / 2 / (this.player.height * 0.8);
+        //const scaleFactor = this.screenHeight / 2 / (this.player.height * 1);
         // Apply the scale factor to the player
         this.player.setScale(scaleFactor);
         this.player.scaleX = -1 * _posDiff;
+        this.setPlayerAnims(this._characterAnimations[PlayerAnim.Idle],false)
         resolve(this.player);
       } catch (error) {
         reject();
@@ -155,7 +175,7 @@ class MiFrensPlayer {
         {
           fontSize: "15px",
           color: "#ffffff",
-          fontFamily: "Arial",
+          fontFamily: "ArialBold",
           align: "center",
         }
       );
@@ -208,12 +228,12 @@ class MiFrensPlayer {
         this._playerPosition === PlayerPosition.RightPlayer ? 55 : 115;
       this.specialPowerProgressText = this.gameManager.add.text(
         this.specialPowerProgressBase.x - 75 * _posDiff,
-        this.specialPowerProgressBase.y - 5,
+        this.specialPowerProgressBase.y - 7,
         `${this.currentSpecialPower}/${this.totalSpecialPower}`,
         {
           fontSize: "10px",
           color: "#ffffff",
-          fontFamily: "Arial",
+          fontFamily: "ArialBold",
           align: "center",
         }
       );
@@ -226,7 +246,7 @@ class MiFrensPlayer {
   setSpecialPowerProgress() {
     this.currentSpecialPower = 0;
     //Build Updated
-    this.isSpecialPower=false;
+    this.isSpecialPower = false;
     this.setProgress(
       this.specialPowerProgressFill,
       this.currentSpecialPower / this.totalSpecialPower
@@ -287,7 +307,7 @@ class MiFrensPlayer {
         {
           fontSize: "10px", // Font size
           color: "#ffffff", // Font color (white in this case)
-          fontFamily: "Arial", // Font family
+          fontFamily: "ArialBold", // Font family
           align: "center", // Text alignment
         }
       );
@@ -309,7 +329,7 @@ class MiFrensPlayer {
         {
           fontSize: "15px", // Font size
           color: "#ffffff", // Font color (white in this case)
-          fontFamily: "Arial", // Font family
+          fontFamily: "ArialBold", // Font family
           align: "center", // Text alignment
         }
       );
@@ -328,27 +348,43 @@ class MiFrensPlayer {
     player.y = playerPos?.y;
   }
   setPlayerAnim(animationData: IAnimationData) {
-    if(animationData.animType ===PlayerAnimType.SpecialPower){
+    if (animationData.animType === PlayerAnimType.SpecialPower) {
       this.setSpecialPowerProgress();
     }
-    this.player.animationState.setAnimation(
-      0,
-      animationData.anim,
-      animationData.loop
-    );
+    this.setPlayerAnims(animationData?.anim,animationData!.loop);
+    
+    // this.player.animationState.setAnimation(
+    //   0,
+    //   animationData.anim,
+    // );
   }
   setWinningData(el: IPlayerResult) {
-    let anim = el.winner ? "victory_pose" : "ko_death";
+    let anim = el.winner
+      ? this._characterAnimations[PlayerAnim.Victory_Pose]
+      : this._characterAnimations[PlayerAnim.Ko_Death];
     if (GameModel._selfPlayer._playeId === el.playerId) {
       let winText = el.winner ? "WinText" : "LoseText";
       this.setPopUp(winText);
     }
-    this.setPlayerAnims(anim, true);
+    this.player.animationState.setAnimation(
+      0,
+      anim,
+      false
+    );
     this.resetRoundData();
     console.log("Set Result = ", el);
   }
   setPlayerAnims(anim: string, loop: boolean) {
     this.player.animationState.setAnimation(0, anim, loop);
+    this.player.animationState.addListener({
+      complete: (trackEntry: { animation: { name: string } }) => {
+        this.player.animationState.setAnimation(
+          0,
+          this._characterAnimations[PlayerAnim.Idle_Tension],
+          true
+        );
+      },
+    });
   }
   setPopUp(winningTexture: string) {
     let winningText = this.gameManager.add.sprite(
@@ -365,7 +401,11 @@ class MiFrensPlayer {
     this.setUserData(playerData);
     let _posDiff = this._playerPosition === PlayerPosition.LeftPlayer ? -1 : 1;
     this.player.x = this.screenWidth / 2 + 200 * _posDiff;
-    this.setPlayerAnims("idle_tension", true);
+    this.setSpecialPowerProgress();
+    this.setPlayerAnims(
+      this._characterAnimations[PlayerAnim.Idle],
+      true
+    );
   }
   setUserData(playerData: IPlayerData) {
     try {
@@ -382,10 +422,66 @@ class MiFrensPlayer {
     } catch (error) {}
   }
   setProgress(progressBar: any, progrss: number) {
-    console.log("Player TYpe");
+    //console.log("Player TYpe");
     let progressDiff =
       this._playerPosition === PlayerPosition.LeftPlayer ? -1 : 1;
     progressBar.scaleX = progressDiff * progrss;
+  }
+  setHitAnim(animData: IAnimationData) {
+    console.log("Hit Anim : ",animData.animType);
+    let animName = PlayerAnim.Idle;
+    let anims = this._characterAnimations;
+    if (
+      animData.isCollision &&
+      animData.playerId !== this._playeId &&
+      (animData?.animType === PlayerAnimType.Hand ||
+        animData?.animType === PlayerAnimType.Leg ||
+        animData?.animType === PlayerAnimType.SpecialPower)
+    ) {
+      if (animData?.animType === PlayerAnimType.Hand) {
+        animName = PlayerAnim.Hit_MidPunch;
+      } else if (animData?.animType === PlayerAnimType.Leg) {
+        animName = PlayerAnim.Hit_MidKick;
+      } else if (animData?.animType === PlayerAnimType.SpecialPower) {
+        animName = PlayerAnim.Air_Recovery;
+      }
+       this.setPlayerAnims(anims[animName], false);
+    }
+  }
+  playAnimationIfNotAnimating(
+    animationName: string,
+    loop: boolean,
+    animType: PlayerAnimType
+  ) {
+    const track = this.player.animationState.tracks[0];
+
+    // If there is an active track, return its animation name
+    if (track && track.animation) {
+      //console.log("Current Animation : ", track.animation.name, track);
+      // return track.animation.name;
+    }
+    if (!this.isAnimating) {
+      let animTypes = animType;
+      this.isAnimating = true;
+      this.player.animationState.setAnimation(0, animationName, loop);
+
+    
+      // Listen for animation complete event to reset the flag
+      this.player.animationState.addListener({
+        complete: (trackEntry: { animation: { name: string } }) => {
+          if (trackEntry.animation.name === animationName) {
+
+            this.player.animationState.setAnimation(
+              0,
+              this._characterAnimations[PlayerAnim.Idle_Tension],
+              true
+            );
+            // Animation has finished, allow new animations
+            this.isAnimating = false;
+          }
+        },
+      });
+    }
   }
 }
 

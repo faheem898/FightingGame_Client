@@ -1,83 +1,60 @@
-export enum PlayerIcon{
-    Icon1="Icon1",
-    Icon2="Icon2",
+import { Bonk, Doge, Pepe, SirMifriend } from "./AssetManager";
+
+export enum PlayerIcon {
+  Icon1 = "Icon1",
+  Icon2 = "Icon2",
 }
-export enum GameEvents{
+export enum GameEvents {
   DISCONNECT = "DISCONNECT",
   LEAVE = "LEAVE",
   JOIN = "JOIN",
 }
-export enum PlayerPosition{
-    LeftPlayer,
-    RightPlayer,
+export enum PlayerPosition {
+  LeftPlayer,
+  RightPlayer,
 }
-export enum PlayerAnimType{
-    Hand,
-    Leg,
-    SpecialPower,
-    Shield,
-    Movement,
+export enum PlayerAnimType {
+  Hand,
+  Leg,
+  SpecialPower,
+  Shield,
+  Movement,
+  Defence,
 }
-export const fightSceneTexture = [
-    "MatchMakingBg.png",
-    "WinText.png",
-    "LoseText.png",
-    "KoText.png",
-    "FightText.png",
-    "HealthProgressBase.png",
-    "HealthProgressFill.png",
-    "hand.png",
-    "legs.png",
-    "shield.png",
-    "fire.png",
-    "TimeBg.png",
-    "PlayerIcon.png",
-    "FilledBar.png",
-    "EmptyBar.png",
-    "PlayerMovement.png",
-    "up.png",
-    "down.png",
-    "left.png",
-    "right.png",
-    "JoyStickBg.png",
-    "JoyStickController.png",
-    "PlayerUI/Icon1.png",
-    "PlayerUI/Icon2.png",
-    "PlayerUI/LeftIconIndicator.png",
-    "PlayerUI/RightIconIndicator.png",
-    "PlayerUI/SpecialPowerProgressBg.png",
-    "PlayerUI/Blockchain.png",
-    "PlayerUI/coin.png",
-    "PlayerUI/PlayerBg.png",
-    "PlayerUI/PlayerNameBg.png",
-  ];
+export enum RoomType {
+  Random,
+  PlayWithFriends,
+  Tournament,
+}
+export const RoomNameKey = ["CityStage", "CityStage", "CityStage"];
+export enum PlayerName {
+  SirMifriend,
+  Doge,
+  Pepe,
+  Bonk,
+}
+export const PlayerNameKey = ["SirMifriend", "Doge", "Pepe", "Bonk"];
+export enum PlayerAnim {
+  Idle,
+  Idle_Tension,
+  Low_Punch,
+  Mid_Punch,
+  High_Punch,
+  Combo_Punch,
+  Low_Kick,
+  Mid_Kick,
+  High_Kick,
+  Jump_Kick,
+  Mid_Block,
+  Weapon_Attack,
+  Victory_Pose,
+  Ko_Death,
+  Jump_Neutral,
+  Walk_Forward,
+  Hit_HighPunch,
+  Hit_MidPunch,
+  Hit_MidKick,
+  Air_Recovery,
+}
 
-  export const sirMifren: string[] = [
-    "idle",
-    "idle_tension",
-
-    "combo_punch",
-    "low_punch",
-    "mid_punch",
-    "high_punch",
-
-    "low_kick",
-    "mid_kick",
-    "high_kick",
-    "jump_kick",
-
-    "getting_hit_high_punch",
-    "getting_hit_mid_kick",
-    "getting_hit_mid_punch",
-
-    "mid_block",
-    "weapon_attack",
-
-    "dash_forward",
-    "walk_forward",
-    "jump_neutral",
-
-    "air_recovery",
-    "victory_pose",
-    "ko_death",
-  ];
+export const PlayerAnims = [SirMifriend, Doge, Pepe, Bonk];

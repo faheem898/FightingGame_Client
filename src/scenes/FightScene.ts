@@ -4,8 +4,13 @@ import VirtualJoyStickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-p
 import MiFrensPlayer from "../PlayerManager/MiFrensPlayer1";
 import {
   GameEvents,
+  PlayerAnim,
   PlayerAnimType,
+  PlayerName,
+  PlayerNameKey,
   PlayerPosition,
+  RoomNameKey,
+  RoomType,
 } from "../Constant/GameConstant";
 import {
   IAnimationData,
@@ -44,8 +49,10 @@ export default class FightScene extends Phaser.Scene {
   private playerAnimType: PlayerAnimType = PlayerAnimType.Hand;
   private punchHitboxPlayer: Phaser.GameObjects.Rectangle | undefined;
   private punchHitboxEnemy: Phaser.GameObjects.Rectangle | undefined;
+  gameTimerText!: Phaser.GameObjects.Text;
   playerHitbox1: any;
   playerHitbox2: any;
+  gameTimeInterval:any;
   private playerAction: {
     [key in "hand" | "legs" | "shield" | "fire"]: () => void;
   };
@@ -77,8 +84,9 @@ export default class FightScene extends Phaser.Scene {
     const bg = this.add.spine(
       this.gameWidth / 2,
       this.gameHeight / 2,
-      "CityStage",
-      "CityStage-atlas"
+      RoomNameKey[GameModel._roomType],
+      `${RoomNameKey[GameModel._roomType]}-atlas`
+      // "CityStage-atlas"
     );
     bg.animationState.setAnimation(0, "animation", true);
     const scale = this.gameWidth / 1600;
@@ -116,7 +124,10 @@ export default class FightScene extends Phaser.Scene {
       this.handlePlayerData.bind(this)
     );
     EventManager.on(ClientEvents.PLAYER_WINNER, this.handleWinner.bind(this));
-    EventManager.on(ClientEvents.NEW_ROUND_START, this.startNewRound.bind(this));
+    EventManager.on(
+      ClientEvents.NEW_ROUND_START,
+      this.startNewRound.bind(this)
+    );
   }
   deregisterEvent() {
     EventManager.off(
@@ -132,8 +143,10 @@ export default class FightScene extends Phaser.Scene {
       this.handlePlayerData.bind(this)
     );
     EventManager.off(ClientEvents.PLAYER_WINNER, this.handleWinner.bind(this));
-    EventManager.on(ClientEvents.NEW_ROUND_START, this.startNewRound.bind(this));
-
+    EventManager.on(
+      ClientEvents.NEW_ROUND_START,
+      this.startNewRound.bind(this)
+    );
   }
   handlePosition(event: CustomEvent) {
     let positionData: IPositionData = event.detail;
@@ -151,6 +164,13 @@ export default class FightScene extends Phaser.Scene {
       console.log("Animation Data : ", animationData);
       this._opponentPlayerManager.setPlayerAnim(animationData);
     }
+    this.playersComponentMap?.forEach(element => {
+      element.setHitAnim(animationData);
+    });
+  }
+  getPlayerWithSessionId(sessionId:any){
+    let plyr = this.playersComponentMap.get(sessionId);
+    return plyr;
   }
   handlePlayerData(event: CustomEvent) {
     let playerData: IPlayerData[] = event.detail;
@@ -168,6 +188,7 @@ export default class FightScene extends Phaser.Scene {
       let playerComponent = this.playersComponentMap?.get(el.sessionId);
       playerComponent?.setWinningData(el);
     });
+    clearInterval(this.gameTimeInterval);
   }
 
   startNewRound(event: CustomEvent) {
@@ -178,6 +199,7 @@ export default class FightScene extends Phaser.Scene {
       plyr?.setNewRound(el);
     });
     this.isAnimating = false;
+    this.startTimer();
     console.log("startNewRound Data : ", playerData);
   }
   initilizePlayer(playerData: IPlayerData): Promise<MiFrensPlayer> {
@@ -239,7 +261,7 @@ export default class FightScene extends Phaser.Scene {
     this.playerHitbox1 = this.add.zone(
       this._selfPlayer.x,
       this._selfPlayer.y,
-      this._selfPlayer.width + 40,
+      this._selfPlayer.width+this._selfPlayerManager._collisionWidth,
       this._selfPlayer.height
     );
     this.physics.world.enable(this.playerHitbox1);
@@ -251,7 +273,7 @@ export default class FightScene extends Phaser.Scene {
     this.playerHitbox2 = this.add.zone(
       this._opponentPlayer.x,
       this._opponentPlayer.y,
-      this._opponentPlayer.width + 40,
+      this._opponentPlayer.width + this._opponentPlayerManager._collisionWidth,
       this._opponentPlayer.height
     );
     this.physics.world.enable(this.playerHitbox2);
@@ -365,21 +387,21 @@ export default class FightScene extends Phaser.Scene {
     // Trigger punch animation or logic here
     let cursor = this.cursors;
     if (cursor.down.isDown) {
-      this.playAnimationIfNotAnimating("low_punch", false, PlayerAnimType.Hand);
+      this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Low_Punch], false, PlayerAnimType.Hand);
     } else if (cursor.left.isDown) {
       this.playAnimationIfNotAnimating(
-        "combo_punch",
+        this._selfPlayerManager._characterAnimations[PlayerAnim.Combo_Punch],
         false,
         PlayerAnimType.Hand
       );
     } else if (cursor.up.isDown) {
       this.playAnimationIfNotAnimating(
-        "high_punch",
+        this._selfPlayerManager._characterAnimations[PlayerAnim.High_Punch],
         false,
         PlayerAnimType.Hand
       );
     } else {
-      this.playAnimationIfNotAnimating("mid_punch", false, PlayerAnimType.Hand);
+      this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Mid_Punch], false, PlayerAnimType.Hand);
     }
   }
   resizeCollision(_collisionWidth: number) {
@@ -409,13 +431,29 @@ export default class FightScene extends Phaser.Scene {
     // Trigger kick animation or logic here
     let cursor = this.cursors;
     if (cursor.down.isDown) {
-      this.playAnimationIfNotAnimating("low_kick", false, PlayerAnimType.Leg);
+      this.playAnimationIfNotAnimating(
+        this._selfPlayerManager._characterAnimations[PlayerAnim.Low_Kick],
+        false,
+        PlayerAnimType.Leg
+      );
     } else if (cursor.left.isDown) {
-      this.playAnimationIfNotAnimating("high_kick", false, PlayerAnimType.Leg);
+      this.playAnimationIfNotAnimating(
+        this._selfPlayerManager._characterAnimations[PlayerAnim.High_Kick],
+        false,
+        PlayerAnimType.Leg
+      );
     } else if (cursor.up.isDown) {
-      this.playAnimationIfNotAnimating("jump_kick", false, PlayerAnimType.Leg);
+      this.playAnimationIfNotAnimating(
+        this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Kick],
+        false,
+        PlayerAnimType.Leg
+      );
     } else {
-      this.playAnimationIfNotAnimating("mid_kick", false, PlayerAnimType.Leg);
+      this.playAnimationIfNotAnimating(
+        this._selfPlayerManager._characterAnimations[PlayerAnim.Mid_Kick],
+        false,
+        PlayerAnimType.Leg
+      );
     }
   }
 
@@ -423,11 +461,15 @@ export default class FightScene extends Phaser.Scene {
     console.log("Shield action triggered: Block!");
     // Trigger shield raise animation or logic here
     let cursor = this.cursors;
-    this.playAnimationIfNotAnimating("mid_block", false,PlayerAnimType.Shield);
+    this.playAnimationIfNotAnimating(
+      this._selfPlayerManager._characterAnimations[PlayerAnim.Mid_Block],
+      false,
+      PlayerAnimType.Shield
+    );
   }
 
   performFireAction() {
-    if(!this._selfPlayerManager.isSpecialPower){
+    if (!this._selfPlayerManager.isSpecialPower) {
       return;
     }
     if (!this.isAnimating) {
@@ -437,9 +479,9 @@ export default class FightScene extends Phaser.Scene {
     }
     console.log("Fire action triggered: Fire attack!");
     // Trigger fire animation or logic here
-   this._selfPlayerManager.setSpecialPowerProgress();
+    this._selfPlayerManager.setSpecialPowerProgress();
     this.playAnimationIfNotAnimating(
-      "weapon_attack",
+      this._selfPlayerManager._characterAnimations[PlayerAnim.Weapon_Attack],
       false,
       PlayerAnimType.SpecialPower
     );
@@ -473,15 +515,28 @@ export default class FightScene extends Phaser.Scene {
       if (this.cursors.left.isDown) {
         this._selfPlayer.x -= (speed * this.game.loop.delta) / 1000; // Move left
         this.onPositionChanged();
+        this.playAnimationIfNotAnimating(
+          this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward],
+          false,
+          PlayerAnimType.Movement
+        );
       } else if (this.cursors.right.isDown) {
         this._selfPlayer.x += (speed * this.game.loop.delta) / 1000; // Move right
-        this.playAnimationIfNotAnimating("walk_forward", false,PlayerAnimType.Movement);
+        this.playAnimationIfNotAnimating(
+          this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward],
+          false,
+          PlayerAnimType.Movement
+        );
         this.onPositionChanged();
       }
 
       // Check for up/down arrow key input
       if (this.cursors.up.isDown) {
-        this.playAnimationIfNotAnimating("jump_neutral", false,PlayerAnimType.Movement);
+        this.playAnimationIfNotAnimating(
+          this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Neutral],
+          false,
+          PlayerAnimType.Movement
+        );
       }
       // else if (this.cursors.down.isDown) {
       //   this._selfPlayer.y += speed * this.game.loop.delta / 1000;  // Move down
@@ -561,10 +616,15 @@ export default class FightScene extends Phaser.Scene {
           if (trackEntry.animation.name === animationName) {
             this.resizeCollision(-this._collisionWidth);
             this._collisionWidth = 0;
-            this.onAnimationChanged("idle_tension", true, false,PlayerAnimType.Movement);
+            this.onAnimationChanged(
+              this._selfPlayerManager._characterAnimations[PlayerAnim.Idle_Tension],
+              true,
+              false,
+              PlayerAnimType.Movement
+            );
             this._selfPlayer.animationState.setAnimation(
               0,
-              "idle_tension",
+              this._selfPlayerManager._characterAnimations[PlayerAnim.Idle_Tension],
               true
             );
             // Animation has finished, allow new animations
@@ -627,32 +687,45 @@ export default class FightScene extends Phaser.Scene {
     try {
       let timeBg = this.add.sprite(this.screenWidth / 2, 30, "TimeBg");
       timeBg.setScale(1.2);
-      const label = this.add.text(
+      this.gameTimerText = this.add.text(
         this.screenWidth / 2 - 25,
         timeBg.y - 10,
         "03:00", // The text content
         {
           fontSize: "20px", // Font size
           color: "#ffffff", // Font color (white in this case)
-          fontFamily: "Arial", // Font family
+          fontFamily: "ArialBold", // Font family
           align: "center", // Text alignment
         }
       );
-      let countdown = 180;
-      this.time.addEvent({
-        delay: 1000, // 1000 ms = 1 second
-        callback: () => {
-          countdown--; // Decrement the countdown by 1 second
-          label.setText(this.formatTime(countdown)); // Update the label text with the new time in MM:SS format
-
-          if (countdown <= 0) {
-            label.setText("00:00"); // When the countdown reaches 0, show "Time's Up!"
-            // You can stop the timer or trigger another event here if needed
-          }
-        },
-        loop: true, // Keep looping this event every second
-      });
+      this.startTimer()
     } catch (error) {}
+  }
+  startTimer(){
+    let countdown = 180;
+    this.gameTimeInterval=setInterval(() => {
+      countdown--; // Decrement the countdown by 1 second
+      this.gameTimerText.setText(this.formatTime(countdown)); // Update the label text with the new time in MM:SS format
+
+      if (countdown <= 0) {
+        clearInterval(this.gameTimeInterval);
+        this.gameTimerText.setText("00:00"); // When the countdown reaches 0, show "Time's Up!"
+        // You can stop the timer or trigger another event here if needed
+      }
+    }, 1000);
+    // this.time.addEvent({
+    //   delay: 1000, // 1000 ms = 1 second
+    //   callback: () => {
+    //     countdown--; // Decrement the countdown by 1 second
+    //     label.setText(this.formatTime(countdown)); // Update the label text with the new time in MM:SS format
+
+    //     if (countdown <= 0) {
+    //       label.setText("00:00"); // When the countdown reaches 0, show "Time's Up!"
+    //       // You can stop the timer or trigger another event here if needed
+    //     }
+    //   },
+    //   loop: true, // Keep looping this event every second
+    // });
   }
   formatTime(seconds: number): string {
     const minutes = Math.floor(seconds / 60); // Get the number of minutes

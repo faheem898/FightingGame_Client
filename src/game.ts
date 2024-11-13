@@ -8,13 +8,15 @@ import FightScene from "./scenes/FightScene";
 import MatchMakingScene from "./scenes/MatchMakingScene";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
+  parent: 'game-container', // Matches the ID of your game container
   width: window.innerWidth,
   height: window.innerHeight,
   backgroundColor: 0x000000,
   scene: [FightSceneSplash,MatchMakingScene, FightScene, Scene1, Scene2],
   pixelArt: true,
   scale: {
-    mode: Phaser.Scale.RESIZE,
+    // mode: Phaser.Scale.RESIZE,
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   plugins: {
@@ -37,7 +39,7 @@ const config: Phaser.Types.Core.GameConfig = {
       //gravity: { y: 0 }, // disable gravity if needed
       debug: false // optional, enable for physics debugging
     }
-  }
+  },
 };
 
 const game = new Phaser.Game(config);
