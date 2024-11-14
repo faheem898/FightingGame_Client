@@ -205,7 +205,7 @@ export default class FightScene extends Phaser.Scene {
   initilizePlayer(playerData: IPlayerData): Promise<MiFrensPlayer> {
     return new Promise<MiFrensPlayer>(async (resolve, reject) => {
       try {
-        console.log("addPlayer 2: ", playerData);
+        // console.log("addPlayer 2: ", playerData);
         let isSelfPlayer = false;
         let playerComponent = new MiFrensPlayer(this, playerData);
         if (playerData.playerId === GameModel._playerData.playerId) {
@@ -215,7 +215,7 @@ export default class FightScene extends Phaser.Scene {
           isSelfPlayer = true;
         } else {
           await this.createOpponentPlayer(playerComponent);
-          console.log("Opponent Player Data : ", playerData);
+          // console.log("Opponent Player Data : ", playerData);
         }
         this.playersComponentMap.set(playerData.sessionId, playerComponent);
         return resolve(playerComponent);
@@ -227,13 +227,13 @@ export default class FightScene extends Phaser.Scene {
   async createSelfPlayer(playerComponent: MiFrensPlayer) {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        console.log("Create Self Player");
+        // console.log("Create Self Player");
         this._selfPlayerManager = playerComponent;
         await this._selfPlayerManager.initializePlayer(
           PlayerPosition.LeftPlayer
         );
         this._selfPlayer = await this._selfPlayerManager.createPlayer();
-        console.log("Player : ", this._selfPlayer);
+        // console.log("Player : ", this._selfPlayer);
         this.setSelfCollision();
         resolve();
       } catch (error) {
@@ -267,7 +267,7 @@ export default class FightScene extends Phaser.Scene {
     this.physics.world.enable(this.playerHitbox1);
     this.playerHitbox1.body.setAllowGravity(false);
     this.playerHitbox1.body.setImmovable(true);
-    console.log("Self Collision");
+    // console.log("Self Collision");
   }
   setOpponentCollision() {
     this.playerHitbox2 = this.add.zone(
@@ -279,7 +279,7 @@ export default class FightScene extends Phaser.Scene {
     this.physics.world.enable(this.playerHitbox2);
     this.playerHitbox2.body.setAllowGravity(false);
     this.playerHitbox2.body.setImmovable(true);
-    console.log("Opponent Collision");
+    // console.log("Opponent Collision");
   }
   startCollisionDetection() {
     this.physics.add.overlap(
@@ -321,7 +321,7 @@ export default class FightScene extends Phaser.Scene {
           self.dumpJoyStickState();
         });
       this.setMovementButton();
-      console.log("JoyStick : ", this.joystick);
+      // console.log("JoyStick : ", this.joystick);
     }
   }
   setMovementButton() {
@@ -329,7 +329,7 @@ export default class FightScene extends Phaser.Scene {
     this.add.sprite(100, this.screenHeight - 65, "down");
     this.add.sprite(60, this.screenHeight - 105, "left");
     this.add.sprite(140, this.screenHeight - 105, "right");
-    console.log("Set Up down Panel : ", this.joystick.base);
+    // console.log("Set Up down Panel : ", this.joystick.base);
   }
 
   setControlButton() {
@@ -341,7 +341,7 @@ export default class FightScene extends Phaser.Scene {
       this.screenHeight - 130
     );
     this.createControl("fire", this.screenWidth - 85, this.screenHeight - 160);
-    console.log("Create Control Called");
+    // console.log("Create Control Called");
     // Optionally: create a background for the fight scene or player character
     // this.add.sprite(screenWidth / 2, screenHeight / 2, "background");
 
@@ -377,13 +377,13 @@ export default class FightScene extends Phaser.Scene {
   // Action functions (can be expanded to trigger animations, effects, etc.)
   performHandAction() {
     //Handle Collison
-    console.log("Animating =", this.isAnimating);
+    // console.log("Animating =", this.isAnimating);
     if (!this.isAnimating) {
       this._collisionWidth = 80;
       this.resizeCollision(this._collisionWidth);
-      console.log("Hand Collsion Width : ", this.playerHitbox1.width);
+      // console.log("Hand Collsion Width : ", this.playerHitbox1.width);
     }
-    console.log("Hand action triggered: Punch!");
+    // console.log("Hand action triggered: Punch!");
     // Trigger punch animation or logic here
     let cursor = this.cursors;
     if (cursor.down.isDown) {

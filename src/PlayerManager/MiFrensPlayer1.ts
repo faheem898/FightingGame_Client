@@ -71,19 +71,19 @@ class MiFrensPlayer {
   setPlayerData(playerData: IPlayerData) {
     this._playeId = playerData?.playerId;
     this._sessionId = playerData?.sessionId;
+    this._characterName = playerData.characterName;
+
     if (playerData.placeId === "0") {
       this._playerPosition = PlayerPosition.LeftPlayer;
-      this._characterName = PlayerName.SirMifriend;
       this.isLeftPlayer = true;
     } else {
       this._playerPosition = PlayerPosition.RightPlayer;
-      this._characterName = PlayerName.Pepe;
     }
   }
   async initializePlayer(_playerPosition: PlayerPosition) {
     return new Promise<void>((resolve, reject) => {
       try {
-        console.log("Initialize Player ", _playerPosition);
+        // console.log("Initialize Player ", _playerPosition);
         //this._playerPosition = _playerPosition;
         this.setPlayerHealthProgress();
         this.setPlayerSpecialPowerProgress();
@@ -100,7 +100,7 @@ class MiFrensPlayer {
   async createPlayer() {
     return new Promise<void>((resolve, reject) => {
       try {
-        //console.log("Player Createdd", this._playerPosition);
+        console.log("Player Createdd",PlayerNameKey[this._characterName]);
         this._collisionWidth = GameModel._collisonWidth[this._characterName];
         this._characterAnimations = PlayerAnims[this._characterName];
         //console.log("Character Animations : ",this._characterAnimations);
@@ -228,7 +228,7 @@ class MiFrensPlayer {
         this._playerPosition === PlayerPosition.RightPlayer ? 55 : 115;
       this.specialPowerProgressText = this.gameManager.add.text(
         this.specialPowerProgressBase.x - 75 * _posDiff,
-        this.specialPowerProgressBase.y - 7,
+        this.specialPowerProgressBase.y - 6,
         `${this.currentSpecialPower}/${this.totalSpecialPower}`,
         {
           fontSize: "10px",
@@ -345,18 +345,18 @@ class MiFrensPlayer {
   }
   setPlayerPosition(player: any, playerPos: Vector3 | undefined) {
     player.x = playerPos?.x;
-    player.y = playerPos?.y;
+    player.y = player.y;
   }
   setPlayerAnim(animationData: IAnimationData) {
     if (animationData.animType === PlayerAnimType.SpecialPower) {
       this.setSpecialPowerProgress();
     }
-    this.setPlayerAnims(animationData?.anim,animationData!.loop);
+    //this.setPlayerAnims(animationData?.anim,animationData!.loop);
     
-    // this.player.animationState.setAnimation(
-    //   0,
-    //   animationData.anim,
-    // );
+    this.player.animationState.setAnimation(
+      0,
+      animationData.anim,
+    );
   }
   setWinningData(el: IPlayerResult) {
     let anim = el.winner
@@ -372,9 +372,10 @@ class MiFrensPlayer {
       false
     );
     this.resetRoundData();
-    console.log("Set Result = ", el);
+    // console.log("Set Result = ", el);
   }
   setPlayerAnims(anim: string, loop: boolean) {
+    console.log("Play Normal Anim")
     this.player.animationState.setAnimation(0, anim, loop);
     this.player.animationState.addListener({
       complete: (trackEntry: { animation: { name: string } }) => {
@@ -409,7 +410,7 @@ class MiFrensPlayer {
   }
   setUserData(playerData: IPlayerData) {
     try {
-      console.log("Set User Data :", this._playerData);
+      // console.log("Set User Data :", this._playerData);
       this.playerNameText.setText(playerData?.playerName ?? "Unknown Player");
       this.wagerAmountText.setText(playerData?.wagerAmount?.toString() ?? "0");
       this.setProgress(
@@ -428,7 +429,7 @@ class MiFrensPlayer {
     progressBar.scaleX = progressDiff * progrss;
   }
   setHitAnim(animData: IAnimationData) {
-    console.log("Hit Anim : ",animData.animType);
+    // console.log("Hit Anim : ",animData.animType);
     let animName = PlayerAnim.Idle;
     let anims = this._characterAnimations;
     if (

@@ -12,8 +12,8 @@ export const fightSceneTexture = [
     "fire.png",
     "TimeBg.png",
     "PlayerIcon.png",
-    "FilledBar.png",
-    "EmptyBar.png",
+    "EmptyBar.svg",
+    "FilledBar.svg",
     "PlayerMovement.png",
     "up.png",
     "down.png",
@@ -21,12 +21,12 @@ export const fightSceneTexture = [
     "right.png",
     "JoyStickBg.png",
     "JoyStickController.png",
-    "PlayerUI/Icon1.png",
-    "PlayerUI/Icon2.png",
+    "PlayerUI/Icon1.svg",
+    "PlayerUI/Icon2.svg",
     "PlayerUI/LeftIconIndicator.png",
     "PlayerUI/RightIconIndicator.png",
     "PlayerUI/SpecialPowerProgressBg.png",
-    "PlayerUI/Blockchain.png",
+    "PlayerUI/Blockchain.svg",
     "PlayerUI/coin.png",
     "PlayerUI/PlayerBg.png",
     "PlayerUI/PlayerNameBg.png",
@@ -45,7 +45,7 @@ export const fightSceneTexture = [
       atlas: "Character/Sirmifren/character1.atlas.txt",
     },
     {
-      spineKey: "Sir",
+      spineKey: "Doge",
       json: "Character/Doge/character2.json",
       atlas: "Character/Doge/character2.atlas.txt",
     },
@@ -112,15 +112,17 @@ export const fightSceneTexture = [
   
     "victory_pose",
     "ko_death",
-  
+    
+    "jump_neutral",
+    "walk_forward",
+    
     "getting_hit_high_punch",
     "getting_hit_mid_kick",
     "getting_hit_mid_punch",
-  
-    "dash_forward",
-    "walk_forward",
-    "jump_neutral",
+    
     "air_recovery",
+    "dash_forward",
+  
   ];
   export const Pepe: string[] = [
     "Idle_2",
@@ -174,12 +176,12 @@ export const fightSceneTexture = [
     "18.KOIDeath",
     
     "9.Jump",
-    "21.Run",
+    "20.Walk",
 
-    "getting_hit_high_punch",
-    "getting_hit_mid_kick",
-    "getting_hit_mid_punch",
-  
+    "4.Hurt_Mid_Punch",
+    "3.Hurt_Mid_Kick",
+    "4.Hurt_Mid_Punch",
+    
+    "1.Air_Recovery",
     "dash_forward",
-    "air_recovery",
   ];

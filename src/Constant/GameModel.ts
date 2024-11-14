@@ -4,7 +4,7 @@ import { IPlayerData } from "./GameInterface";
 
 export class GameModel{
     public static _icon: string = "Ico1"; 
-    public static _characterName: PlayerName = PlayerName.Bonk; 
+    public static _characterName: PlayerName = PlayerName.Pepe; 
     public static _roomType: RoomType = RoomType.Random; 
     public static _playerData: IPlayerData; 
     public static _selfPlayer: MiFrensPlayer; 

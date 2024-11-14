@@ -3,6 +3,8 @@ import {
   CharacterJsonData,
   fightSceneTexture,
 } from "../Constant/AssetManager";
+import { PlayerName } from "../Constant/GameConstant";
+import { GameModel } from "../Constant/GameModel";
 import { ServerEventsManager } from "../PlayerManager/ServerEventsManager";
 import { SocketManager } from "../PlayerManager/SocketManager";
 
@@ -29,6 +31,10 @@ export default class FightSceneSplash extends Phaser.Scene {
     "PlayNow.png",
     "SplashFiller.png",
     "SplashBarBase.png",
+    "Character/MiFrens.svg",
+    "Character/Pepe.svg",
+    "Character/Bonk.svg",
+    "Character/Dodge.svg",
   ];
   constructor() {
     super("SplashScene");
@@ -81,8 +87,8 @@ export default class FightSceneSplash extends Phaser.Scene {
     );
     SplashBG.setOrigin(0.5, 0.5); // Ensure the origin is at the center of the sprite
     SplashBG.setDisplaySize(this.gameWidth, this.gameHeight); // Resize the sprite to match the screen size
-
     this.setPlayNowBtn();
+    this.setCharacterBtn();
   }
   setProgressBar() {
     try {
@@ -126,7 +132,56 @@ export default class FightSceneSplash extends Phaser.Scene {
       // Add an event listener for when the sprite is clicked (pointerdown or pointerup)
       playNow.on("pointerdown", () => {
         // When clicked, start the fight scene
+        console.log("Play Now");
         this.scene.start("MatchMakingScene");
+      });
+    } catch (error) {}
+  }
+  async setCharacterBtn() {
+    try {
+      let Mifren = this.add.sprite(
+        (this.gameWidth / 2)+100,
+        (this.gameHeight/2)-40,
+        "Character/MiFrens"
+      );
+      let Pepe = this.add.sprite(
+        (this.gameWidth / 2)+290,
+        (this.gameHeight/2)-40,
+        "Character/Pepe"
+      );
+      let Bonk = this.add.sprite(
+        (this.gameWidth / 2)-100,
+        (this.gameHeight/2)-40,
+        "Character/Bonk"
+      );
+      let Doge = this.add.sprite(
+        (this.gameWidth / 2)-290,
+        (this.gameHeight/2)-40,
+        "Character/Dodge"
+      );
+      Mifren.setScale(0.75);
+      Pepe.setScale(0.75);
+      Bonk.setScale(0.75);
+      Doge.setScale(0.75);
+      Mifren.setInteractive();
+      Pepe.setInteractive();
+      Bonk.setInteractive();
+      Doge.setInteractive();
+      Mifren.on("pointerdown", () => {
+        console.log("Mifren pointerdown");
+        GameModel._characterName=PlayerName.SirMifriend;
+      });
+      Pepe.on("pointerdown", () => {
+        console.log("Pepe pointerdown");
+        GameModel._characterName=PlayerName.Pepe;
+      });
+      Bonk.on("pointerdown", () => {
+        console.log("Bonk pointerdown");
+        GameModel._characterName=PlayerName.Bonk;
+      });
+      Doge.on("pointerdown", () => {
+        console.log("Doge pointerdown");
+        GameModel._characterName=PlayerName.Doge;
       });
     } catch (error) {}
   }
