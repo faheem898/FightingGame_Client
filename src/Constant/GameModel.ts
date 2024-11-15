@@ -1,4 +1,4 @@
-import MiFrensPlayer from "../PlayerManager/MiFrensPlayer1";
+import MiFrensPlayer from "../PlayerManager/Player";
 import { PlayerName, RoomType } from "./GameConstant";
 import { IPlayerData } from "./GameInterface";
 

@@ -9,11 +9,12 @@ import MatchMakingScene from "./scenes/MatchMakingScene";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container', // Matches the ID of your game container
-  width: window.innerWidth,
-  height: window.innerHeight,
+  width: 1280,
+  height: 600,
   backgroundColor: 0x000000,
   scene: [FightSceneSplash,MatchMakingScene, FightScene, Scene1, Scene2],
   pixelArt: true,
+  antialias: false, // Disables anti-aliasing for crisper images
   scale: {
     // mode: Phaser.Scale.RESIZE,
     mode: Phaser.Scale.FIT,

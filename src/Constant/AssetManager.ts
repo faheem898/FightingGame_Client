@@ -30,6 +30,17 @@ export const fightSceneTexture = [
     "PlayerUI/coin.png",
     "PlayerUI/PlayerBg.png",
     "PlayerUI/PlayerNameBg.png",
+    "TopUI/Blockchain.svg",
+    "TopUI/EmptyBar.svg",
+    "TopUI/FilledBar.svg",
+    "TopUI/Icon1.svg",
+    "TopUI/PlayerName.svg",
+    "TopUI/SpecialBar.svg",
+    "TopUI/SpecialBase.svg",
+    "TopUI/BlockChain.svg",
+    "TopUI/WagerFee.svg",
+    "TopUI/Coin.svg",
+  
   ];
   export const BgJsonData = [
     {
