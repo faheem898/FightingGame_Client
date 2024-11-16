@@ -9,5 +9,5 @@ export class GameModel{
     public static _playerData: IPlayerData; 
     public static _selfPlayer: MiFrensPlayer; 
     public static _playerList: IPlayerData[] = []; 
-    public static _collisonWidth = [110,110,10,10]; 
+    public static _collisonWidth = [-210,110,-350,-350]; 
 }

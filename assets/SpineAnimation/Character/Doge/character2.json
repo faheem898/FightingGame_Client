@@ -10,7 +10,7 @@
 	"audio": "D:/Work/Projects_Spine/Fiverr/30-clintondl (Nigeria)"
 },
 "bones": [
-	{ "name": "root","scaleX": 0.45,"scaleY": 0.45 },
+	{ "name": "root" },
 	{ "name": "ch", "parent": "root" },
 	{ "name": "body", "parent": "ch", "y": 735.92 },
 	{ "name": "body2", "parent": "body", "length": 247.78, "rotation": 90 },
@@ -469,6 +469,9 @@
 					"height": 451
 				},
 				"leg2_back": { "x": 185.54, "y": -1.14, "rotation": 95.59, "width": 228, "height": 361 }
+			},
+			"object": {
+				"object1": { "x": 219.97, "rotation": 2.86, "width": 684, "height": 250 }
 			},
 			"rimlight": {
 				"effects/rimlight": { "x": 219.97, "rotation": 2.86, "width": 684, "height": 250 }
@@ -51004,7 +51007,11 @@
 			"object": {
 				"attachment": [
 					{},
-					{ "time": 1.7 }
+					{ "time": 0.3333, "name": "object1" },
+					{ "time": 0.7667, "name": "object1" },
+					{ "time": 0.9333, "name": "object1" },
+					{ "time": 1.1667, "name": "object1" },
+					{ "time": 1.6 }
 				]
 			},
 			"rimlight": {
@@ -53659,7 +53666,11 @@
 			"object": {
 				"attachment": [
 					{},
-					{ "time": 1.7 }
+					{ "time": 0.3333, "name": "object1" },
+					{ "time": 0.7667, "name": "object1" },
+					{ "time": 0.9333, "name": "object1" },
+					{ "time": 1.1667, "name": "object1" },
+					{ "time": 1.6 }
 				]
 			},
 			"rimlight": {
@@ -56322,7 +56333,11 @@
 			"object": {
 				"attachment": [
 					{},
-					{ "time": 1.7 }
+					{ "time": 0.3333, "name": "object1" },
+					{ "time": 0.7667, "name": "object1" },
+					{ "time": 0.9333, "name": "object1" },
+					{ "time": 1.1667, "name": "object1" },
+					{ "time": 1.6 }
 				]
 			},
 			"rimlight": {

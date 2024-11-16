@@ -10,8 +10,8 @@ import Preloader from "./scenes/Preloader";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container', // Matches the ID of your game container
-  width: 1920,
-  height: 1080,
+  width: 2400,
+  height: 1100,
   backgroundColor: 0x000000,
   scene: [Preloader,MatchMakingScene, FightScene, Scene1, Scene2],
   pixelArt: true,

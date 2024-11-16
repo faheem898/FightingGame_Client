@@ -78,12 +78,12 @@ export default class FightScene extends Phaser.Scene {
     //Handle Sir Creation
     // await this.createSelfPlayer();
     // await this.createOpponentPlayer();
+    this.setTimer();
     this.playersData = GameModel._playerList;
     await this.initilizePlayer(this.playersData[0]);
     await this.initilizePlayer(this.playersData[1]);
     this.startCollisionDetection();
     this.setControlButton();
-    this.setTimer();
     this.setJoyStickMovement();
     if (this.input?.keyboard) {
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -432,15 +432,23 @@ export default class FightScene extends Phaser.Scene {
   }
   playAnimationIfNotAnimating(animationName: string, loop: boolean, animType: PlayerAnimType) {
     const track = this._selfPlayer.animationState.tracks[0];
-
+    console.log("Current Anim : ", animationName);
     // If there is an active track, return its animation name
     if (track && track.animation) {
-      //console.log("Current Animation : ", track.animation.name, track);
-      // return track.animation.name;
+      if (track.animation.name === this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward] || track.animation.name === this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Neutral]) {
+        if (track.animation.name === animationName) {
+          //console.log("Animation Return");
+          return;
+        }
+        //return
+      }
     }
     if (!this.isAnimating) {
       let animTypes = animType;
-      this.isAnimating = true;
+      if (animType !== PlayerAnimType.Movement) {
+        //console.log("Animation Playing : ", animationName, this.isAnimating);
+        this.isAnimating = true;
+      }
       this._selfPlayer.animationState.setAnimation(0, animationName, loop);
       let collision = this.physics.world.overlap(this.playerHitbox1, this.playerHitbox2) ? true : false;
       this.onAnimationChanged(animationName, loop, collision, animTypes);

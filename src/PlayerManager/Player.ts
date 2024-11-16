@@ -91,13 +91,12 @@ class Player {
           _posDiff = 1;
         }
         this.player = this.gameManager.add.spine(this.screenWidth / 2 + 425 * _posDiff, this.screenHeight - 25, PlayerNameKey[this._characterName], `${PlayerNameKey[this._characterName]}-atlas`);
-        //this.player.animationState.setAnimation(0, this._characterAnimations[PlayerAnim.Idle_Tension], true);
         this.player.setOrigin(0.5, 0.5);
         //const scaleFactor = this.screenHeight / 2 / (this.player.height * 0.8);
         //const scaleFactor = this.screenHeight / 2 / (this.player.height * 1);
         // Apply the scale factor to the player
-        // this.player.setScale(scaleFactor);
-        this.player.scaleX = -1 * _posDiff;
+        this.player.setScale(0.45);
+        this.player.scaleX = -0.45 * _posDiff;
         this.setPlayerAnims(this._characterAnimations[PlayerAnim.Idle], false);
         resolve(this.player);
       } catch (error) {
@@ -242,7 +241,7 @@ class Player {
       } else if (animData?.animType === PlayerAnimType.Leg) {
         animName = PlayerAnim.Hit_MidKick;
       } else if (animData?.animType === PlayerAnimType.SpecialPower) {
-        animName = PlayerAnim.Air_Recovery;
+        animName = PlayerAnim.Hit_MidPunch;
       }
       this.setPlayerAnims(anims[animName], false);
     }
