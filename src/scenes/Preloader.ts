@@ -13,7 +13,7 @@ export default class Preloader extends Phaser.Scene {
   progressBarFill: any;
   progressBarBase: any;
 
-  SplashTexture: string[] = ["SplashBg.PNG", "PlayNow.png", "SplashFiller.png", "SplashBarBase.png", "Character/MiFrens.svg", "Character/Pepe.svg", "Character/Bonk.svg", "Character/Dodge.svg"];
+  SplashTexture: string[] = ["SplashBg.png", "PlayNow.png", "SplashFiller.png", "SplashBarBase.png", "Character/MiFrens.svg", "Character/Pepe.svg", "Character/Bonk.svg", "Character/Dodge.svg"];
   constructor() {
     super("Preloader");
   }
