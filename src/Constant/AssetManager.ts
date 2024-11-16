@@ -1,5 +1,5 @@
 export const fightSceneTexture = [
-    "MatchMakingBg.png",
+    "MatchMakingBg.svg",
     "WinText.png",
     "LoseText.png",
     "KoText.png",

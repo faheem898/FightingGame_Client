@@ -10,7 +10,7 @@
 	"audio": "D:/projects/old/Fiverr_8/char_1/pepe"
 },
 "bones": [
-	{ "name": "root", "x": 100 ,"scaleX": 0.2,"scaleY": 0.2},
+	{ "name": "root", "x": 100 ,"scaleX": 0.45,"scaleY": 0.45},
 	{ "name": "all", "parent": "root" },
 	{ "name": "Hip", "parent": "all", "rotation": 64.71, "x": 68.47, "y": 886.51 },
 	{

@@ -3,16 +3,17 @@ import { SpinePlugin } from "@esotericsoftware/spine-phaser";
 import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
 import Scene1 from "./scenes/Scene1";
 import Scene2 from "./scenes/Scene2";
-import FightSceneSplash from "./scenes/FightSceneSplash";
+import FightSceneSplash from "./scenes/Preloader";
 import FightScene from "./scenes/FightScene";
 import MatchMakingScene from "./scenes/MatchMakingScene";
+import Preloader from "./scenes/Preloader";
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container', // Matches the ID of your game container
-  width: 1280,
-  height: 600,
+  width: 1920,
+  height: 1080,
   backgroundColor: 0x000000,
-  scene: [FightSceneSplash,MatchMakingScene, FightScene, Scene1, Scene2],
+  scene: [Preloader,MatchMakingScene, FightScene, Scene1, Scene2],
   pixelArt: true,
   antialias: false, // Disables anti-aliasing for crisper images
   scale: {

@@ -10,7 +10,7 @@
 	"audio": "D:/Work/Projects_Spine/Fiverr/30-clintondl (Nigeria)"
 },
 "bones": [
-	{ "name": "root","scaleX": 0.2,"scaleY": 0.2 },
+	{ "name": "root","scaleX": 0.45,"scaleY": 0.45 },
 	{ "name": "ch", "parent": "root" },
 	{ "name": "body", "parent": "ch", "x": 1.29, "y": 779.87 },
 	{ "name": "body2", "parent": "body", "length": 139.05, "rotation": 88.89 },

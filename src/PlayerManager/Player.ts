@@ -34,7 +34,7 @@ class Player {
   _specialPowerInterval!: any;
   _characterName!: PlayerName;
   _characterAnimations: any;
-  _collisionWidth: number = 40;
+  _collisionWidth: number = 100;
 
 
   _healthProgressBar!: ProgressBar;
@@ -90,13 +90,13 @@ class Player {
         if (this._playerPosition === PlayerPosition.RightPlayer) {
           _posDiff = 1;
         }
-        this.player = this.gameManager.add.spine(this.screenWidth / 2 + 200 * _posDiff, this.screenHeight - 25, PlayerNameKey[this._characterName], `${PlayerNameKey[this._characterName]}-atlas`);
+        this.player = this.gameManager.add.spine(this.screenWidth / 2 + 425 * _posDiff, this.screenHeight - 25, PlayerNameKey[this._characterName], `${PlayerNameKey[this._characterName]}-atlas`);
         //this.player.animationState.setAnimation(0, this._characterAnimations[PlayerAnim.Idle_Tension], true);
         this.player.setOrigin(0.5, 0.5);
-        const scaleFactor = this.screenHeight / 2 / (this.player.height * 0.8);
+        //const scaleFactor = this.screenHeight / 2 / (this.player.height * 0.8);
         //const scaleFactor = this.screenHeight / 2 / (this.player.height * 1);
         // Apply the scale factor to the player
-        this.player.setScale(scaleFactor);
+        // this.player.setScale(scaleFactor);
         this.player.scaleX = -1 * _posDiff;
         this.setPlayerAnims(this._characterAnimations[PlayerAnim.Idle], false);
         resolve(this.player);
@@ -123,7 +123,7 @@ class Player {
     this._specialPowerText.setFont("13px");
     this._healthText.setFont("14px");
     nameBg.setScale(1.25, 1.25);
-    const panelContainer = this.gameManager.add.container(this.gameManager.gameWidth / 2 + (_posDiff * 225), 40);
+    const panelContainer = this.gameManager.add.container(this.gameManager.gameWidth / 2 + (_posDiff * 400), 75);
     panelContainer.add(this._healthProgressBar);
     panelContainer.add(nameBg);
     panelContainer.add(this._powerProgressBar);
@@ -138,9 +138,9 @@ class Player {
 
     // this._healthProgressBar.updateProgress(0.7);
     //wagerFee.setSize(78,18);
-
+    panelContainer.setScale(2,2);
     if (playerPosition === PlayerPosition.RightPlayer) {
-      panelContainer.scaleX = -1;
+      panelContainer.scaleX = -2;
       nameText.scaleX = -1;
       wagerFeeText.scaleX = -1;
       this._healthText.scaleX = -1;
@@ -152,6 +152,7 @@ class Player {
       coin.setPosition(-105,22);
     }
     this.setSpecialPowerProgress();
+  
   }
   setSpecialPowerProgress() {
     this.currentSpecialPower = 0;
@@ -216,7 +217,7 @@ class Player {
     this.setPopUp("FightText");
     this.setUserData(playerData);
     let _posDiff = this._playerPosition === PlayerPosition.LeftPlayer ? -1 : 1;
-    this.player.x = this.screenWidth / 2 + 200 * _posDiff;
+    this.player.x = this.screenWidth / 2 + 425 * _posDiff;
     this.setSpecialPowerProgress();
     this.setPlayerAnims(this._characterAnimations[PlayerAnim.Idle], true);
   }

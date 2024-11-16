@@ -39,28 +39,28 @@
     <div id="game-container"></div>
 
     <script>
-      // document.addEventListener(
-      //   "touchend",
-      //   (event) => {
-      //     //makeScreenInOtherDevices();
-      //   },
-      //   { passive: false }
-      // );
-      // function makeScreenInOtherDevices() {
-      //   if (!document.fullscreenElement) {
-      //     if (document.documentElement.requestFullscreen) {
-      //       document.documentElement.requestFullscreen();
-      //     } else if (document.documentElement.mozRequestFullScreen) {
-      //       document.documentElement.mozRequestFullScreen(); // Firefox
-      //     } else if (document.documentElement.webkitRequestFullscreen) {
-      //       document.documentElement.webkitRequestFullscreen(); // Safari
-      //     } else if (document.documentElement.msRequestFullscreen) {
-      //       document.documentElement.msRequestFullscreen(); // IE/Edge
-      //     }
-      //     isAllowShowSwipe = false;
-      //     isAllowedToFullScreenInOtherDevices = false;
-      //   }
-      // }
+      document.addEventListener(
+        "touchend",
+        (event) => {
+          makeScreenInOtherDevices();
+        },
+        { passive: false }
+      );
+      function makeScreenInOtherDevices() {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen(); // Firefox
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(); // Safari
+          } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen(); // IE/Edge
+          }
+          isAllowShowSwipe = false;
+          isAllowedToFullScreenInOtherDevices = false;
+        }
+      }
     </script>
 
     <!-- Your game's bundle.js will be injected here by Webpack -->

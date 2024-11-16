@@ -235,11 +235,11 @@ export default class FightScene extends Phaser.Scene {
     if (joyStickPlugin) {
       this.joystick = joyStickPlugin
         .add(this, {
-          x: 100,
-          y: this.screenHeight - 100,
-          radius: 45,
-          base: this.add.sprite(100, this.screenHeight - 100, "JoyStickBg"),
-          thumb: this.add.sprite(100, this.screenHeight - 100, "JoyStickController"),
+          x: 200,
+          y: this.screenHeight - 200,
+          radius: 90,
+          base: this.add.sprite(200, this.screenHeight - 200, "JoyStickBg"),
+          thumb: this.add.sprite(200, this.screenHeight - 200, "JoyStickController"),
           dir: "8dir", // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
           // fixed: true,
           forceMin: 10,
@@ -253,18 +253,18 @@ export default class FightScene extends Phaser.Scene {
     }
   }
   setMovementButton() {
-    this.add.sprite(100, this.screenHeight - 145, "up");
-    this.add.sprite(100, this.screenHeight - 65, "down");
-    this.add.sprite(60, this.screenHeight - 105, "left");
-    this.add.sprite(140, this.screenHeight - 105, "right");
+    this.add.sprite(200, this.screenHeight - 290, "up");
+    this.add.sprite(200, this.screenHeight - 130, "down");
+    this.add.sprite(115, this.screenHeight - 215, "left");
+    this.add.sprite(285, this.screenHeight - 215, "right");
     // console.log("Set Up down Panel : ", this.joystick.base);
   }
 
   setControlButton() {
-    this.createControl("hand", this.screenWidth - 100, this.screenHeight - 75);
-    this.createControl("legs", this.screenWidth - 190, this.screenHeight - 60);
-    this.createControl("shield", this.screenWidth - 160, this.screenHeight - 130);
-    this.createControl("fire", this.screenWidth - 85, this.screenHeight - 160);
+    this.createControl("hand", this.screenWidth - 200, this.screenHeight - 150);
+    this.createControl("legs", this.screenWidth - 380, this.screenHeight - 120);
+    this.createControl("shield", this.screenWidth - 320, this.screenHeight - 260);
+    this.createControl("fire", this.screenWidth - 160, this.screenHeight - 320);
     // console.log("Create Control Called");
     // Optionally: create a background for the fight scene or player character
     // this.add.sprite(screenWidth / 2, screenHeight / 2, "background");
@@ -382,7 +382,7 @@ export default class FightScene extends Phaser.Scene {
       this.playerHitbox2.x = this._opponentPlayer.x;
       this.playerHitbox2.y = this._opponentPlayer.y;
       // Define movement speed
-      const speed = 200;
+      const speed = 400;
 
       // Check for left/right arrow key input
       if (this.cursors.left.isDown) {
@@ -510,14 +510,14 @@ export default class FightScene extends Phaser.Scene {
   }
   setTimer() {
     try {
-      let timeBg = this.add.sprite(this.screenWidth / 2, 30, "TimeBg");
+      let timeBg = this.add.sprite(this.screenWidth / 2, 65, "TimeBg");
       timeBg.setScale(1.2);
       this.gameTimerText = this.add.text(
-        this.screenWidth / 2 - 25,
-        timeBg.y - 10,
+        this.screenWidth / 2 - 45,
+        timeBg.y - 15,
         "03:00", // The text content
         {
-          fontSize: "20px", // Font size
+          fontSize: "35px", // Font size
           color: "#ffffff", // Font color (white in this case)
           fontFamily: "ArialBold", // Font family
           align: "center", // Text alignment

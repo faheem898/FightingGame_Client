@@ -10,7 +10,7 @@
 	"audio": ""
 },
 "bones": [
-	{ "name": "root" ,"scaleX": 0.2,"scaleY": 0.2},
+	{ "name": "root" ,"scaleX": 0.45,"scaleY": 0.45},
 	{ "name": "all", "parent": "root" },
 	{ "name": "Hip", "parent": "all", "rotation": 64.71, "x": 88.74, "y": 788.06 },
 	{
