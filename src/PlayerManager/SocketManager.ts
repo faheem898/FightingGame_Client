@@ -42,7 +42,7 @@ export class SocketManager {
 
         // Initialize the socket connection with public reconnection settings
         this._Socket = io(url, {
-          transports: ["polling","websocket"], // Prefer polling first, then websocket as fallback
+          transports: ["polling", "websocket"], // Prefer polling first, then websocket as fallback
           reconnection: true,
           reconnectionAttempts: 5,
           reconnectionDelayMax: this._reconnectionMaxTime,
@@ -93,11 +93,8 @@ export class SocketManager {
       roomType: GameModel._roomType,
     };
     console.log("on join player : ", PlayerData);
-    this.initializeData(PlayerData)
-    ServerEventsManager.getInstance().fireEventToServer(
-      GameEvents.JOIN,
-      PlayerData
-    );
+    this.initializeData(PlayerData);
+    ServerEventsManager.getInstance().fireEventToServer(GameEvents.JOIN, PlayerData);
   }
   initializeData(playerData: IPlayerJoinData) {
     let data: IPlayerData = {
@@ -111,7 +108,7 @@ export class SocketManager {
       placeId: "1",
       totalSpecialPower: 0,
       currentSpecialPower: 0,
-      characterName:PlayerName.SirMifriend
+      characterName: PlayerName.SirMifriend,
     };
     GameModel._playerData = data;
   }
@@ -128,8 +125,7 @@ export class SocketManager {
   }
 
   generateRandomPlayerId(length = 8): string {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let playerId = "";
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);

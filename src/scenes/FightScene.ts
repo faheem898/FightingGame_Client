@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import VirtualJoyStick from "phaser3-rex-plugins/plugins/virtualjoystick.js";
 import VirtualJoyStickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin";
-import { GameEvents, PlayerAnim, PlayerAnimType, PlayerName, PlayerNameKey, PlayerPosition, RoomNameKey, RoomType } from "../Constant/GameConstant";
+import { GameEvents, PlayerAnim, PlayerAnimType, PlayerJoinData, PlayerName, PlayerNameKey, PlayerPosition, RoomNameKey, RoomType } from "../Constant/GameConstant";
 import { IAnimationData, IPlayerData, IPlayerResult, IPositionData, IResultData, IWinnerData } from "../Constant/GameInterface";
 import { IPlayerJoinData } from "../PlayerManager/SocketManager";
 import { GameModel } from "../Constant/GameModel";
@@ -79,6 +79,8 @@ export default class FightScene extends Phaser.Scene {
     // await this.createSelfPlayer();
     // await this.createOpponentPlayer();
     this.setTimer();
+    // GameModel._playerData = PlayerJoinData[0];
+    // GameModel._playerList = PlayerJoinData;
     this.playersData = GameModel._playerList;
     await this.initilizePlayer(this.playersData[0]);
     await this.initilizePlayer(this.playersData[1]);
@@ -115,7 +117,7 @@ export default class FightScene extends Phaser.Scene {
   handleAnimation(event: CustomEvent) {
     let animationData: IAnimationData = event.detail;
     if (animationData.playerId !== this._selfPlayerManager._playeId) {
-      console.log("Animation Data : ", animationData);
+      //console.log("Animation Data : ", animationData);
       this._opponentPlayerManager.setPlayerAnim(animationData);
     }
     this.playersComponentMap?.forEach((element) => {
@@ -133,7 +135,7 @@ export default class FightScene extends Phaser.Scene {
       let plyr = this.playersComponentMap.get(el.sessionId);
       plyr?.setUserData(el);
     });
-    console.log("Player Data : ", playerData);
+    //console.log("Player Data : ", playerData);
   }
   handleWinner(event: CustomEvent) {
     let playerData: IPlayerResult[] = event.detail;
@@ -308,9 +310,13 @@ export default class FightScene extends Phaser.Scene {
     let cursor = this.cursors;
     if (cursor.down.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Low_Punch], false, PlayerAnimType.Hand);
-    } else if (cursor.left.isDown) {
+    } else if (cursor.right.isDown && this._selfPlayerManager.isLeftPlayer) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Combo_Punch], false, PlayerAnimType.Hand);
-    } else if (cursor.up.isDown) {
+    } 
+    else if (cursor.left.isDown&& !this._selfPlayerManager.isLeftPlayer) {
+      this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Combo_Punch], false, PlayerAnimType.Hand);
+    }
+    else if (cursor.up.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.High_Punch], false, PlayerAnimType.Hand);
     } else {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Mid_Punch], false, PlayerAnimType.Hand);
@@ -332,7 +338,9 @@ export default class FightScene extends Phaser.Scene {
     let cursor = this.cursors;
     if (cursor.down.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Low_Kick], false, PlayerAnimType.Leg);
-    } else if (cursor.left.isDown) {
+    } else if (cursor.right.isDown && this._selfPlayerManager.isLeftPlayer) {
+      this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.High_Kick], false, PlayerAnimType.Leg);
+    } else if (cursor.left.isDown && !this._selfPlayerManager.isLeftPlayer) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.High_Kick], false, PlayerAnimType.Leg);
     } else if (cursor.up.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Kick], false, PlayerAnimType.Leg);
@@ -432,7 +440,7 @@ export default class FightScene extends Phaser.Scene {
   }
   playAnimationIfNotAnimating(animationName: string, loop: boolean, animType: PlayerAnimType) {
     const track = this._selfPlayer.animationState.tracks[0];
-    console.log("Current Anim : ", animationName);
+    //console.log("Current Anim : ", animationName);
     // If there is an active track, return its animation name
     if (track && track.animation) {
       if (track.animation.name === this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward] || track.animation.name === this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Neutral]) {

@@ -22,7 +22,7 @@ export class ServerEventsManager{
     }
     fireEventToServer(eventName:any, data: any = null) {
         //console.log("fired data : ", data)
-        if (data) {
+        if (data && this._Socket) {
             this._Socket.emit(eventName, JSON.stringify(data));
         }
         else {
@@ -56,17 +56,17 @@ export class ServerEventsManager{
     }
     updatePlayerData(data: string) {
         let responseData = JSON.parse(data);
-        console.log("updatePlayerData : ",JSON.parse(data));
+        //console.log("updatePlayerData : ",JSON.parse(data));
         EventManager.fire(ClientEvents.PLAYER_DATA_UPDATE, responseData);
     }
     updateResult(data: string) {
         let responseData = JSON.parse(data);
-        console.log("updateResult : ",JSON.parse(data));
+        //console.log("updateResult : ",JSON.parse(data));
         EventManager.fire(ClientEvents.PLAYER_WINNER , responseData);
     }
     startNewRound(data: string) {
         let responseData = JSON.parse(data);
-        console.log("updateResult : ",JSON.parse(data));
+        //console.log("updateResult : ",JSON.parse(data));
         EventManager.fire(ClientEvents.NEW_ROUND_START, responseData);
     }
 }

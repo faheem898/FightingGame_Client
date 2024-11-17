@@ -57,4 +57,37 @@ export enum PlayerAnim {
   Air_Recovery,
 }
 
+export const PlayerJoinData = [
+  {
+    characterName: 3,
+    currentHealth: 20,
+    currentSpecialPower: 0,
+    isPlaying: true,
+    photoId: 1,
+    placeId: "0",
+    playerId: "lzDMDuPx12",
+    playerName: "Faheem",
+    roomType: 0,
+    sessionId: "lCpwQWGu562RHdv3AAAl11",
+    totalHealth: 20,
+    totalSpecialPower: 10,
+    wagerAmount: 5000,
+  },
+  {
+    characterName: 3,
+    currentHealth: 20,
+    currentSpecialPower: 0,
+    isPlaying: true,
+    photoId: 1,
+    placeId: "1",
+    playerId: "lzDMDuPx",
+    playerName: "Faheem",
+    roomType: 0,
+    sessionId: "lCpwQWGu562RHdv3AAAl",
+    totalHealth: 20,
+    totalSpecialPower: 10,
+    wagerAmount: 5000,
+  },
+];
+
 export const PlayerAnims = [SirMifriend, Doge, Pepe, Bonk];

@@ -21,6 +21,9 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+  input: {
+    activePointers: 2, // Allow at least two simultaneous touch points
+  },
   plugins: {
     scene: [
       { key: "spine.SpinePlugin", 

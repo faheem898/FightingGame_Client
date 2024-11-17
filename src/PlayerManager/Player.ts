@@ -84,6 +84,7 @@ class Player {
       try {
         console.log("Player Createdd", PlayerNameKey[this._characterName]);
         this._collisionWidth = GameModel._collisonWidth[this._characterName];
+        console.log("Collision WIdth : ",this._collisionWidth)
         this._characterAnimations = PlayerAnims[this._characterName];
         //console.log("Character Animations : ",this._characterAnimations);
         let _posDiff = -1;
@@ -234,6 +235,7 @@ class Player {
   setHitAnim(animData: IAnimationData) {
     // console.log("Hit Anim : ",animData.animType);
     let animName = PlayerAnim.Idle;
+    let delay=0;
     let anims = this._characterAnimations;
     if (animData.isCollision && animData.playerId !== this._playeId && (animData?.animType === PlayerAnimType.Hand || animData?.animType === PlayerAnimType.Leg || animData?.animType === PlayerAnimType.SpecialPower)) {
       if (animData?.animType === PlayerAnimType.Hand) {
@@ -241,9 +243,13 @@ class Player {
       } else if (animData?.animType === PlayerAnimType.Leg) {
         animName = PlayerAnim.Hit_MidKick;
       } else if (animData?.animType === PlayerAnimType.SpecialPower) {
+        delay=400;
         animName = PlayerAnim.Hit_MidPunch;
       }
+      setTimeout(() => {
       this.setPlayerAnims(anims[animName], false);
+        
+      }, delay);
     }
   }
   playAnimationIfNotAnimating(animationName: string, loop: boolean, animType: PlayerAnimType) {

@@ -25,7 +25,7 @@ export default class Preloader extends Phaser.Scene {
     this.SplashTexture.forEach((element) => {
       const imageKey = element.split(".")[0];
       const imageAddress = `assets/GameUI/${element}`;
-      console.log("Image Key : ", imageKey, imageAddress);
+      //console.log("Image Key : ", imageKey, imageAddress);
       this.load.image(imageKey, imageAddress);
     });
     BgJsonData.forEach((element) => {
@@ -43,7 +43,7 @@ export default class Preloader extends Phaser.Scene {
       //console.log("Image Key : ", imageKey, imageAddress);
       this.load.image(imageKey, imageAddress);
     });
-     //this.openDogeAnim();
+    // this.openDogeAnim();
     //this.setProgressBar();
   }
   create() {
@@ -62,9 +62,9 @@ export default class Preloader extends Phaser.Scene {
 
     // let pla=this.add.spine(
     //   this.gameWidth / 2,
-    //   this.gameHeight,
-    //   "Bonk",
-    //   `Bonk-atlas`
+    //   this.gameHeight/2,
+    //   "Doge",
+    //   `Doge-atlas`
     //   // "CityStage-atlas"
     // );
     // pla.animationState.setAnimation(0,"5.Idle_Tension",true);
@@ -159,18 +159,19 @@ fitHeight() {
       let Mifren = this.add.sprite(this.gameWidth / 2 + 100, 120, "Character/MiFrens");
       let Pepe = this.add.sprite(this.gameWidth / 2 + 290, 120, "Character/Pepe");
       let Bonk = this.add.sprite(this.gameWidth / 2 - 100, 120, "Character/Bonk");
-     // let Doge = this.add.sprite(this.gameWidth / 2 - 290, 120, "Character/Dodge");
+     let Doge = this.add.sprite(this.gameWidth / 2 - 290, 120, "Character/Dodge");
       Mifren.setScale(0.75);
       Pepe.setScale(0.75);
       Bonk.setScale(0.75);
-     // Doge.setScale(0.75);
+      Doge.setScale(0.75);
       Mifren.setInteractive();
       Pepe.setInteractive();
       Bonk.setInteractive();
-      //Doge.setInteractive();
+      Doge.setInteractive();
       Mifren.on("pointerdown", () => {
         console.log("Mifren pointerdown");
         GameModel._characterName = PlayerName.SirMifriend;
+        //this.scene.start("FightScene");
         this.scene.start("MatchMakingScene");
       });
       Pepe.on("pointerdown", () => {
@@ -183,11 +184,11 @@ fitHeight() {
         GameModel._characterName = PlayerName.Bonk;
         this.scene.start("MatchMakingScene");
       });
-      // Doge.on("pointerdown", () => {
-      //   console.log("Doge pointerdown");
-      //   GameModel._characterName = PlayerName.Doge;
-      //   this.scene.start("MatchMakingScene");
-      // });
+      Doge.on("pointerdown", () => {
+        console.log("Doge pointerdown");
+        GameModel._characterName = PlayerName.Doge;
+        this.scene.start("MatchMakingScene");
+      });
     } catch (error) {}
   }
 
