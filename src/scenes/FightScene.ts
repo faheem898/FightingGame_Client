@@ -37,8 +37,9 @@ export default class FightScene extends Phaser.Scene {
   playerHitbox1: any;
   playerHitbox2: any;
   gameTimeInterval: any;
+  isRunning: boolean = false;
   private playerAction: {
-    [key in "hand" | "legs" | "shield" | "fire"]: () => void;
+    [key in "hand" | "legs" | "shield" | "fire" | "run"]: () => void;
   };
   playersData: IPlayerData[] = [];
   playersComponentMap: Map<string, Player> = new Map<string, Player>();
@@ -49,6 +50,7 @@ export default class FightScene extends Phaser.Scene {
       legs: this.performLegsAction,
       shield: this.performShieldAction,
       fire: this.performFireAction,
+      run: this.performRunAction,
     };
   }
 
@@ -62,6 +64,9 @@ export default class FightScene extends Phaser.Scene {
 
   async create() {
     // Create background Spine object in the center
+    this.playersData = GameModel._playerList;
+    GameModel._roomType=this.playersData[0].roomType;
+    // console.log("Room Type : ",GameModel._roomType)
     const bg = this.add.spine(
       this.gameWidth / 2,
       this.gameHeight / 2,
@@ -70,8 +75,8 @@ export default class FightScene extends Phaser.Scene {
       // "CityStage-atlas"
     );
     bg.animationState.setAnimation(0, "animation", true);
-    const scale = this.gameWidth / 1600;
-    const scaleY = this.gameHeight / 600;
+    const scale = this.gameWidth / 4000;
+    const scaleY = this.gameHeight / 1500;
     bg.setScale(scale, scaleY);
     this.physics.world.setBoundsCollision(true, true, true, true);
 
@@ -79,9 +84,8 @@ export default class FightScene extends Phaser.Scene {
     // await this.createSelfPlayer();
     // await this.createOpponentPlayer();
     this.setTimer();
-    // GameModel._playerData = PlayerJoinData[0];
+    //GameModel._playerData = PlayerJoinData[0];
     // GameModel._playerList = PlayerJoinData;
-    this.playersData = GameModel._playerList;
     await this.initilizePlayer(this.playersData[0]);
     await this.initilizePlayer(this.playersData[1]);
     this.startCollisionDetection();
@@ -130,9 +134,11 @@ export default class FightScene extends Phaser.Scene {
   }
   handlePlayerData(event: CustomEvent) {
     let playerData: IPlayerData[] = event.detail;
+    //console.log("Player Data : ",playerData)
     this.playersData = playerData;
     this.playersData.forEach((el: IPlayerData) => {
       let plyr = this.playersComponentMap.get(el.sessionId);
+      //console.log("Player Id : ",plyr?._playeId,plyr?._sessionId,plyr?.isLeftPlayer)
       plyr?.setUserData(el);
     });
     //console.log("Player Data : ", playerData);
@@ -185,7 +191,7 @@ export default class FightScene extends Phaser.Scene {
       try {
         // console.log("Create Self Player");
         this._selfPlayerManager = playerComponent;
-        await this._selfPlayerManager.initializePlayer(PlayerPosition.LeftPlayer);
+        await this._selfPlayerManager.initializePlayer();
         this._selfPlayer = await this._selfPlayerManager.createPlayer();
         // console.log("Player : ", this._selfPlayer);
         this.setSelfCollision();
@@ -200,7 +206,7 @@ export default class FightScene extends Phaser.Scene {
       try {
         console.log("Create Opponent Player");
         this._opponentPlayerManager = playerComponent;
-        await this._opponentPlayerManager.initializePlayer(PlayerPosition.RightPlayer);
+        await this._opponentPlayerManager.initializePlayer();
         this._opponentPlayer = await this._opponentPlayerManager.createPlayer();
         this.setOpponentCollision();
         resolve();
@@ -259,14 +265,19 @@ export default class FightScene extends Phaser.Scene {
     this.add.sprite(200, this.screenHeight - 130, "down");
     this.add.sprite(115, this.screenHeight - 215, "left");
     this.add.sprite(285, this.screenHeight - 215, "right");
+    this.add.sprite(150, this.screenHeight - 260, "TopLeft");
+    this.add.sprite(250, this.screenHeight - 260, "TopRight");
+    this.add.sprite(150, this.screenHeight - 175, "BottomLeft");
+    this.add.sprite(250, this.screenHeight - 175, "BottomRight");
     // console.log("Set Up down Panel : ", this.joystick.base);
   }
 
   setControlButton() {
     this.createControl("hand", this.screenWidth - 200, this.screenHeight - 150);
-    this.createControl("legs", this.screenWidth - 380, this.screenHeight - 120);
-    this.createControl("shield", this.screenWidth - 320, this.screenHeight - 260);
-    this.createControl("fire", this.screenWidth - 160, this.screenHeight - 320);
+    this.createControl("legs", this.screenWidth - 380, this.screenHeight - 110);
+    this.createControl("shield", this.screenWidth - 380, this.screenHeight - 230);
+    this.createControl("fire", this.screenWidth - 160, this.screenHeight - 330);
+    this.createControl("run", this.screenWidth - 280, this.screenHeight - 310);
     // console.log("Create Control Called");
     // Optionally: create a background for the fight scene or player character
     // this.add.sprite(screenWidth / 2, screenHeight / 2, "background");
@@ -277,6 +288,7 @@ export default class FightScene extends Phaser.Scene {
       legs: () => this.performLegsAction(),
       shield: () => this.performShieldAction(),
       fire: () => this.performFireAction(),
+      run: () => this.performRunAction(),
     };
   }
 
@@ -307,16 +319,16 @@ export default class FightScene extends Phaser.Scene {
     }
     // console.log("Hand action triggered: Punch!");
     // Trigger punch animation or logic here
+    // this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.High_Punch], false, PlayerAnimType.Hand);
+    // return;
     let cursor = this.cursors;
     if (cursor.down.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Low_Punch], false, PlayerAnimType.Hand);
     } else if (cursor.right.isDown && this._selfPlayerManager.isLeftPlayer) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Combo_Punch], false, PlayerAnimType.Hand);
-    } 
-    else if (cursor.left.isDown&& !this._selfPlayerManager.isLeftPlayer) {
+    } else if (cursor.left.isDown && !this._selfPlayerManager.isLeftPlayer) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Combo_Punch], false, PlayerAnimType.Hand);
-    }
-    else if (cursor.up.isDown) {
+    } else if (cursor.up.isDown) {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.High_Punch], false, PlayerAnimType.Hand);
     } else {
       this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Mid_Punch], false, PlayerAnimType.Hand);
@@ -361,7 +373,7 @@ export default class FightScene extends Phaser.Scene {
       return;
     }
     if (!this.isAnimating) {
-      this._collisionWidth = 185;
+      this._collisionWidth = 900;
       this.resizeCollision(this._collisionWidth);
       console.log("Hand Collsion Width : ", this.playerHitbox1.width);
     }
@@ -369,6 +381,47 @@ export default class FightScene extends Phaser.Scene {
     // Trigger fire animation or logic here
     this._selfPlayerManager.setSpecialPowerProgress();
     this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Weapon_Attack], false, PlayerAnimType.SpecialPower);
+    //Handle Collison
+  }
+
+  performRunAction() {
+    if (!this.isAnimating) {
+      //this._collisionWidth = 100;
+      this.resizeCollision(this._collisionWidth);
+      console.log("Hand Collsion Width : ", this.playerHitbox1.width);
+    }
+    console.log("performRunAction!");
+    // Trigger fire animation or logic here
+    this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.dash_forward], false, PlayerAnimType.Movement);
+    this.isRunning = true;
+    if (this._selfPlayerManager.isLeftPlayer) {
+      this.cursors.right.isDown = true;
+    } else if (!this._selfPlayerManager.isLeftPlayer) {
+      this.cursors.left.isDown = true;
+    }
+
+    setTimeout(() => {
+      this.isRunning = false;
+          this.cursors.right.isDown = false;
+          this.cursors.left.isDown = false;
+    }, 850);
+    // for (let index = 0; index < 3; index++) {
+    //   setTimeout(() => {
+    //     if (this._selfPlayerManager.isLeftPlayer) {
+    //       this.cursors.right.isDown = true;
+    //     } else if (!this._selfPlayerManager.isLeftPlayer) {
+    //       this.cursors.left.isDown = true;
+    //     }
+    //     this.update();
+    //     //se
+    //     if (index === 2) {
+    //       this.isRunning = false;
+    //       this.cursors.right.isDown = false;
+    //       this.cursors.left.isDown = false;
+    //     }
+    //   }, index * 250);
+    // }
+
     //Handle Collison
   }
   update() {
@@ -396,11 +449,15 @@ export default class FightScene extends Phaser.Scene {
       if (this.cursors.left.isDown) {
         this._selfPlayer.x -= (speed * this.game.loop.delta) / 1000; // Move left
         this.onPositionChanged();
-        this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+        if (!this.isRunning) {
+          this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+        }
       } else if (this.cursors.right.isDown) {
         this._selfPlayer.x += (speed * this.game.loop.delta) / 1000; // Move right
-        this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
         this.onPositionChanged();
+        if (!this.isRunning) {
+          this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+        }
       }
 
       // Check for up/down arrow key input

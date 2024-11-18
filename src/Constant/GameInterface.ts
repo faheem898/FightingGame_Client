@@ -14,7 +14,7 @@ export interface IPlayerData {
   totalSpecialPower?: number;
   currentSpecialPower?: number;
   characterName: number;
-  roomType?: number;
+  roomType: number;
 }
 export interface IWinnerData {
     playerId?: string;

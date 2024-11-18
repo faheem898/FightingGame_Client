@@ -1,0 +1,84 @@
+clintondl_2520temple_2520stage.png
+size:4008,3797
+filter:Linear,Linear
+pma:true
+back portal energy_L
+bounds:1398,3245,567,550
+offsets:0,0,567,551
+back portal energy_L_glow
+bounds:3114,3229,582,566
+back portal energy_R
+bounds:1967,3244,567,551
+back portal energy_R_glow
+bounds:2536,3231,576,564
+offsets:3,2,582,566
+back portal gate
+bounds:2,2,4004,889
+back portal glow_L
+bounds:875,3287,508,521
+offsets:82,331,4004,1504
+rotate:90
+back portal glow_R
+bounds:380,3304,493,491
+offsets:3431,344,4004,1504
+dust
+bounds:2,1722,598,617
+offsets:21,6,625,625
+rotate:90
+floor
+bounds:2,2918,4000,309
+offsets:2,2,4004,313
+floor smoke
+bounds:2,2322,4004,594
+offsets:0,94,4004,688
+front smoke
+bounds:2,893,4004,610
+offsets:0,0,4004,721
+glow
+bounds:2,3633,162,177
+offsets:19,13,200,200
+rotate:90
+portal energy
+bounds:621,1628,707,692
+portal energy_glow
+bounds:1330,1582,758,738
+offsets:13,19,781,768
+portal glow
+bounds:2090,1505,815,862
+offsets:1555,548,4004,1504
+rotate:90
+smoke
+bounds:181,3609,197,186
+offsets:2,3,201,190
+
+clintondl_2520temple_2520stage_2.png
+size:4004,3112
+filter:Linear,Linear
+pma:true
+back smoke
+bounds:2,2207,4000,903
+offsets:2,2,4004,915
+front collumns
+bounds:2,2,2764,1276
+offsets:5,3,2774,1281
+portal smoke
+bounds:2,1280,3085,925
+offsets:21,2,3109,930
+
+clintondl_2520temple_2520stage_3.png
+size:4004,2969
+filter:Linear,Linear
+pma:true
+Back
+bounds:2,2,4000,1500
+offsets:2,2,4004,1504
+portal gate
+bounds:2,1504,1691,1463
+
+clintondl_2520temple_2520stage_4.png
+size:4004,1504
+filter:Linear,Linear
+pma:true
+back collumns
+bounds:2,2,4000,1500
+offsets:2,2,4004,1504

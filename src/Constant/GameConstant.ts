@@ -26,7 +26,7 @@ export enum RoomType {
   PlayWithFriends,
   Tournament,
 }
-export const RoomNameKey = ["CityStage", "CityStage", "CityStage"];
+export const RoomNameKey = ["CityStage", "DesertBg", "TempleStageBg"];
 export enum PlayerName {
   SirMifriend,
   Doge,
@@ -55,6 +55,7 @@ export enum PlayerAnim {
   Hit_MidPunch,
   Hit_MidKick,
   Air_Recovery,
+  dash_forward,
 }
 
 export const PlayerJoinData = [

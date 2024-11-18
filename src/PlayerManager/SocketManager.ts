@@ -109,6 +109,7 @@ export class SocketManager {
       totalSpecialPower: 0,
       currentSpecialPower: 0,
       characterName: PlayerName.SirMifriend,
+      roomType:GameModel._roomType
     };
     GameModel._playerData = data;
   }

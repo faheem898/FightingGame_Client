@@ -10,12 +10,17 @@ export const fightSceneTexture = [
     "legs.png",
     "shield.png",
     "fire.png",
+    "run.png",
     "TimeBg.png",
     "PlayerIcon.png",
     "up.png",
     "down.png",
     "left.png",
     "right.png",
+    "TopLeft.png",
+    "TopRight.png",
+    "BottomRight.png",
+    "BottomLeft.png",
     "JoyStickBg.png",
     "JoyStickController.png",
     "PlayerUI/Icon1.svg",
@@ -43,6 +48,16 @@ export const fightSceneTexture = [
       spineKey: "CityStage",
       json: "Bg/CityStageBg/City stage.json",
       atlas: "Bg/CityStageBg/City stage.atlas",
+    },
+    {
+      spineKey: "DesertBg",
+      json: "Bg/DesertBg/Desert stage.json",
+      atlas: "Bg/DesertBg/Desert stage.atlas",
+    },
+    {
+      spineKey: "TempleStageBg",
+      json: "Bg/TempleStageBg/clintondl_2520temple_2520stage.json",
+      atlas: "Bg/TempleStageBg/clintondl_2520temple_2520stage.atlas",
     },
   ];
   export const CharacterJsonData = [
@@ -159,7 +174,7 @@ export const fightSceneTexture = [
     "Hurt_Mid_Punch",
     
     "Air_Recovery",
-    "dash_forward",
+    "Run",
     
   ];
   export const Bonk: string[] = [
@@ -190,5 +205,5 @@ export const fightSceneTexture = [
     "4.Hurt_Mid_Punch",
     
     "1.Air_Recovery",
-    "dash_forward",
+    "21.Run",
   ];

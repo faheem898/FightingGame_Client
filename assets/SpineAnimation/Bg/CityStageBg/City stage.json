@@ -11,7 +11,7 @@
 	
 },
 "bones": [
-	{ "name": "root","scaleX": 0.4,"scaleY": 0.4   },
+	{ "name": "root"  },
 	{ "name": "main", "parent": "root" },
 	{ "name": "main2", "parent": "main", "length": 543.41, "rotation": -5.39, "x": -2029.22, "y": 578.91 },
 	{ "name": "main3", "parent": "main2", "length": 478.13, "rotation": -10.72, "x": 543.41 },

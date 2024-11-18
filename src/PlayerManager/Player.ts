@@ -36,7 +36,6 @@ class Player {
   _characterAnimations: any;
   _collisionWidth: number = 100;
 
-
   _healthProgressBar!: ProgressBar;
   _powerProgressBar!: ProgressBar;
   _specialPowerText!: TextObject;
@@ -48,7 +47,7 @@ class Player {
     this.screenHeight = this.gameManager.screenHeight;
     this._playerData = playerData;
     this._playeId = playerData.playerId;
-    this._sessionId = playerData.playerId;
+    // this._sessionId = playerData.playerId;
     GameModel._characterName = playerData?.characterName;
     this._characterName = GameModel._characterName;
     this.setPlayerData(playerData);
@@ -66,10 +65,10 @@ class Player {
       this._playerPosition = PlayerPosition.RightPlayer;
     }
   }
-  async initializePlayer(_playerPosition: PlayerPosition) {
+  async initializePlayer() {
     return new Promise<void>((resolve, reject) => {
       try {
-        this.setTopPanel(_playerPosition)
+        this.setTopPanel(this._playerPosition);
         this.setPopUp("FightText");
         this.setUserData(this._playerData);
         resolve();
@@ -84,7 +83,7 @@ class Player {
       try {
         console.log("Player Createdd", PlayerNameKey[this._characterName]);
         this._collisionWidth = GameModel._collisonWidth[this._characterName];
-        console.log("Collision WIdth : ",this._collisionWidth)
+        console.log("Collision WIdth : ", this._collisionWidth);
         this._characterAnimations = PlayerAnims[this._characterName];
         //console.log("Character Animations : ",this._characterAnimations);
         let _posDiff = -1;
@@ -106,7 +105,7 @@ class Player {
     });
   }
   setTopPanel(playerPosition: PlayerPosition) {
-    const _posDiff = playerPosition===PlayerPosition.LeftPlayer ? -1 : 1;
+    const _posDiff = playerPosition === PlayerPosition.LeftPlayer ? -1 : 1;
     this._healthProgressBar = new ProgressBar(this.gameManager, 0, -5, "TopUI/EmptyBar", "TopUI/FilledBar");
     this._powerProgressBar = new ProgressBar(this.gameManager, -68, 8, "TopUI/SpecialBase", "TopUI/SpecialBar");
     let playerIcon = new SpriteObject(this.gameManager, -190, 0, "TopUI/Icon1");
@@ -123,7 +122,7 @@ class Player {
     this._specialPowerText.setFont("13px");
     this._healthText.setFont("14px");
     nameBg.setScale(1.25, 1.25);
-    const panelContainer = this.gameManager.add.container(this.gameManager.gameWidth / 2 + (_posDiff * 400), 75);
+    const panelContainer = this.gameManager.add.container(this.gameManager.gameWidth / 2 + _posDiff * 400, 75);
     panelContainer.add(this._healthProgressBar);
     panelContainer.add(nameBg);
     panelContainer.add(this._powerProgressBar);
@@ -138,21 +137,20 @@ class Player {
 
     // this._healthProgressBar.updateProgress(0.7);
     //wagerFee.setSize(78,18);
-    panelContainer.setScale(2,2);
+    panelContainer.setScale(2, 2);
     if (playerPosition === PlayerPosition.RightPlayer) {
       panelContainer.scaleX = -2;
       nameText.scaleX = -1;
       wagerFeeText.scaleX = -1;
       this._healthText.scaleX = -1;
       this._specialPowerText.scaleX = -1;
-      this._healthText.setPosition(130,-25);
-      nameText.setPosition(-110,-25);
-      wagerFeeText.setPosition(-120,15);
-      this._specialPowerText.setPosition(-50,2);
-      coin.setPosition(-105,22);
+      this._healthText.setPosition(130, -25);
+      nameText.setPosition(-110, -25);
+      wagerFeeText.setPosition(-120, 15);
+      this._specialPowerText.setPosition(-50, 2);
+      coin.setPosition(-105, 22);
     }
     this.setSpecialPowerProgress();
-  
   }
   setSpecialPowerProgress() {
     this.currentSpecialPower = 0;
@@ -224,7 +222,7 @@ class Player {
   setUserData(playerData: IPlayerData) {
     try {
       this._healthText.setText(`${playerData?.currentHealth}/${playerData?.totalHealth}`);
-      this._healthProgressBar.updateProgress(playerData?.currentHealth/playerData?.totalHealth);
+      this._healthProgressBar.updateProgress(playerData?.currentHealth / playerData?.totalHealth);
     } catch (error) {}
   }
   setProgress(progressBar: any, progrss: number) {
@@ -235,20 +233,39 @@ class Player {
   setHitAnim(animData: IAnimationData) {
     // console.log("Hit Anim : ",animData.animType);
     let animName = PlayerAnim.Idle;
-    let delay=0;
+    let delay = 0;
+    let opponentPlayer=this.gameManager.getPlayerWithSessionId(animData.sessionId);
+    let opponentAnim=opponentPlayer?._characterAnimations;
     let anims = this._characterAnimations;
     if (animData.isCollision && animData.playerId !== this._playeId && (animData?.animType === PlayerAnimType.Hand || animData?.animType === PlayerAnimType.Leg || animData?.animType === PlayerAnimType.SpecialPower)) {
-      if (animData?.animType === PlayerAnimType.Hand) {
+      //console.log("Anim Data : ",animData,this._characterAnimations)
+      if (animData?.animType === PlayerAnimType.Hand && (animData?.anim === opponentAnim[PlayerAnim.Low_Punch] || animData?.anim === opponentAnim[PlayerAnim.Mid_Punch])) {
         animName = PlayerAnim.Hit_MidPunch;
+        console.log("Normal Punch : ");
+
+      } else if (animData?.animType === PlayerAnimType.Hand && animData?.anim === opponentAnim[PlayerAnim.High_Punch]) {
+        animName = PlayerAnim.Air_Recovery;
+        console.log("High Punch : ");
+
+      } else if (animData?.animType === PlayerAnimType.Hand && animData?.anim === opponentAnim[PlayerAnim.Combo_Punch]) {
+        animName = PlayerAnim.Hit_MidPunch;
+        for(let i=0;i<3;i++){
+          setTimeout(() => {
+            this.player.animationState.setAnimation(0, anims[animName], true);
+          }, i*500);
+        }
+        // this.player.animationState.setAnimation(0, anims[animName], true);
+        //console.log("Combo Punch : ");
+        
+        return;
       } else if (animData?.animType === PlayerAnimType.Leg) {
         animName = PlayerAnim.Hit_MidKick;
       } else if (animData?.animType === PlayerAnimType.SpecialPower) {
-        delay=400;
+        delay = 400;
         animName = PlayerAnim.Hit_MidPunch;
       }
       setTimeout(() => {
-      this.setPlayerAnims(anims[animName], false);
-        
+        this.setPlayerAnims(anims[animName], false);
       }, delay);
     }
   }
