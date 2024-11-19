@@ -65,7 +65,7 @@ export default class FightScene extends Phaser.Scene {
   async create() {
     // Create background Spine object in the center
     this.playersData = GameModel._playerList;
-    GameModel._roomType=this.playersData[0].roomType;
+    GameModel._roomType = this.playersData[0].roomType;
     // console.log("Room Type : ",GameModel._roomType)
     const bg = this.add.spine(
       this.gameWidth / 2,
@@ -402,27 +402,10 @@ export default class FightScene extends Phaser.Scene {
 
     setTimeout(() => {
       this.isRunning = false;
-          this.cursors.right.isDown = false;
-          this.cursors.left.isDown = false;
+      this.cursors.right.isDown = false;
+      this.cursors.left.isDown = false;
     }, 850);
-    // for (let index = 0; index < 3; index++) {
-    //   setTimeout(() => {
-    //     if (this._selfPlayerManager.isLeftPlayer) {
-    //       this.cursors.right.isDown = true;
-    //     } else if (!this._selfPlayerManager.isLeftPlayer) {
-    //       this.cursors.left.isDown = true;
-    //     }
-    //     this.update();
-    //     //se
-    //     if (index === 2) {
-    //       this.isRunning = false;
-    //       this.cursors.right.isDown = false;
-    //       this.cursors.left.isDown = false;
-    //     }
-    //   }, index * 250);
-    // }
-
-    //Handle Collison
+    //ollison
   }
   update() {
     if (this._selfPlayer) {
@@ -444,19 +427,29 @@ export default class FightScene extends Phaser.Scene {
       this.playerHitbox2.y = this._opponentPlayer.y;
       // Define movement speed
       const speed = 400;
-
+      // if (this.cursors.left.isDown && this.cursors.up.isDown) {
+      //   console.log("JoyStick : ", this.cursors);
+      // }
       // Check for left/right arrow key input
       if (this.cursors.left.isDown) {
         this._selfPlayer.x -= (speed * this.game.loop.delta) / 1000; // Move left
         this.onPositionChanged();
         if (!this.isRunning) {
-          this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+          if (this.cursors.up.isDown) {
+            this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Neutral], false, PlayerAnimType.Movement);
+          } else {
+            this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+          }
         }
       } else if (this.cursors.right.isDown) {
         this._selfPlayer.x += (speed * this.game.loop.delta) / 1000; // Move right
         this.onPositionChanged();
         if (!this.isRunning) {
+          if (this.cursors.up.isDown) {
+            this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Jump_Neutral], false, PlayerAnimType.Movement);
+          } else {
           this.playAnimationIfNotAnimating(this._selfPlayerManager._characterAnimations[PlayerAnim.Walk_Forward], false, PlayerAnimType.Movement);
+          }
         }
       }
 
