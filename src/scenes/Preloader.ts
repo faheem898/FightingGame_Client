@@ -168,6 +168,7 @@ fitHeight() {
       Pepe.setInteractive();
       Bonk.setInteractive();
       Doge.setInteractive();
+      return;
       Mifren.on("pointerdown", () => {
         console.log("Mifren pointerdown");
         GameModel._characterName = PlayerName.SirMifriend;
