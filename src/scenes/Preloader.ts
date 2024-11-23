@@ -156,7 +156,6 @@ fitHeight() {
   }
   async setCharacterBtn() {
     try {
-      return;
       let Mifren = this.add.sprite(this.gameWidth / 2 + 100, 120, "Character/MiFrens");
       let Pepe = this.add.sprite(this.gameWidth / 2 + 290, 120, "Character/Pepe");
       let Bonk = this.add.sprite(this.gameWidth / 2 - 100, 120, "Character/Bonk");
