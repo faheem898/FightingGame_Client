@@ -39,7 +39,7 @@ export class SocketManager {
       try {
         //const url = "http://localhost:3000"; // Local server URL
         //const url = "https://fightinggame-server.onrender.com"; // Local server URL
-        const url = "http://157.173.119.197:3000"; // Local server URL
+        const url = "https://157.173.119.197:3000"; // Local server URL
 
         // Initialize the socket connection with public reconnection settings
         this._Socket = io(url, {
